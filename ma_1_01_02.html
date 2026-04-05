@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>2-1 対称式導入</title>
+    <style>
+        :root {
+            --bg-color: #f8fbff;
+            --main-blue: #2c5d91; 
+            --ans-color: #d32f2f;
+            --ans-bg: #fff9c4;
+            --success-green: #2e7d32;
+            --container-width: 1000px;
+        }
+        body { background-color: var(--bg-color); font-family: "Hiragino Sans", "Meiryo", sans-serif; margin: 0; padding: 0; line-height: 2.2; padding-bottom: 250px; /* 語群エリアのスペースを確保 */ }
+        .wrapper { max-width: var(--container-width); margin: 0 auto; }
+
+        /* TIME表示 */
+        .timer-header { background: #333; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .timer-main { font-size: 26px; color: #ffeb3b; font-family: monospace; font-weight: bold; }
+
+        /* ナビゲーションボタン */
+        .nav-tabs { background: white; padding: 15px 20px; border-bottom: 2px solid #ddd; display: flex; gap: 10px; box-sizing: border-box; }
+        .tab { padding: 12px 10px; border: 1px solid #ccc; border-radius: 5px; background: #f5f5f5; cursor: pointer; color: #333; font-size: 14px; font-weight: bold; flex: 1; text-align: center; text-decoration: none; display: block; }
+        .tab.active { background: var(--main-blue); color: white; border-color: var(--main-blue); }
+
+        .container { padding: 30px 0; }
+        .content-card { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; box-sizing: border-box; }
+        .math-block { background: #fdfdfd; border: 1px solid #eee; padding: 25px; border-radius: 8px; margin: 15px 0; font-family: "Times New Roman", serif; font-size: 1.2em; }
+
+        /* 空欄デザイン */
+        .blank { display: inline-block; min-width: 220px; border-bottom: 2px solid #999; text-align: center; margin: 0 4px; padding: 0 5px; min-height: 1.5em; vertical-align: bottom; }
+        .blank.initial { background-color: var(--ans-bg); color: var(--ans-color); font-weight: bold; }
+        .blank.challenge { background-color: #fffde7; color: #333; border-bottom: 2px solid var(--main-blue); cursor: pointer; }
+        .blank.filled { color: var(--main-blue); background-color: transparent; }
+        .blank.correct { color: var(--success-green); border-bottom: 3px solid var(--success-green); }
+
+        /* 【語群】エリアを画面下部に固定 */
+        #word-bank-container { position: fixed; bottom: 0; left: 0; width: 100%; background: #eee; border-top: 4px solid var(--main-blue); padding: 20px 0; z-index: 2000; display: none; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        .word-bank-title { text-align: center; font-weight: bold; margin-bottom: 10px; color: var(--main-blue); font-size: 16px; }
+        #word-bank { max-width: var(--container-width); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 0 20px; }
+        .word-item { background: white; border: 2px solid var(--main-blue); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; white-space: nowrap; }
+        .word-item.selected { background: var(--main-blue); color: white; }
+        .word-item.used { visibility: hidden; pointer-events: none; }
+
+        .bottom-controls { text-align: center; margin-top: 40px; }
+        .btn-action { padding: 18px 50px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; color: white; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="timer-header">
+        <div class="timer-main">TIME: <span id="timer">00:00.0</span></div>
+        <div style="font-size: 14px;">※導入：紛らわしい公式に注意せよ！</div>
+    </div>
+
+    <div class="nav-tabs">
+        <a href="ma_1_01_02_1.html" class="tab active">2-1 対称式導入</a>
+        <a href="ma_1_01_02_2.html" class="tab">2-2 例題</a>
+        <a href="ma_1_01_02_3.html" class="tab">2-3 類題</a>
+        <a href="ma_1_01_02_4.html" class="tab">2-4 テスト</a>
+    </div>
+
+    <div class="container">
+        <div class="content-card">
+            <h2 style="border-left: 8px solid var(--main-blue); padding-left: 15px;">対称式【導入】</h2>
+            <p>χ²＋χｙ＋ｙ²のような式を「<b>対称式</b>」といいます。<br>
+            対称式の問題（関係式を解くための公式）を解くために次の式を覚える必要があります。</p>
+            
+            <div class="math-block">
+                【暗記】<br>
+                ① χ²＋ｙ²＝<span class="blank initial" data-ans="(χ＋ｙ)²－2χｙ">(χ＋ｙ)²－2χｙ</span><br>
+                ② χ³＋ｙ³＝<span class="blank initial" data-ans="(χ＋ｙ)³－3χｙ(χ＋ｙ)">(χ＋ｙ)³－3χｙ(χ＋ｙ)</span>
+            </div>
+
+            <p style="margin-top: 30px;"><b>①式の証明）</b><br>
+            (χ＋ｙ)²－2χｙ＝χ²＋2χｙ＋ｙ²－2χｙ＝χ²＋ｙ²　　よって、成り立つ。</p>
+
+            <p><b>②式の証明）</b><br>
+            (χ＋ｙ)³－3χｙ(χ＋ｙ)＝χ³＋3χｙ²＋3χ²ｙ＋ｙ³－3χｙｙ－3χｙχ<br>
+            ＝χ³＋3χｙ²＋3χ²ｙ＋ｙ³－3χｙｙ－3χ²ｙ<br>
+            ＝χ³＋ｙ³　　よって、成り立つ。</p>
+
+            <div class="bottom-controls">
+                <button class="btn-action" style="background: #ff9800;" onclick="startChallenge()">公式暗記チャレンジ開始</button>
+                <button class="btn-action" style="background: #4caf50;" onclick="checkAnswers()">正誤判定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="word-bank-container">
+    <div class="word-bank-title">【語群】</div>
+    <div id="word-bank"></div>
+</div>
+
+<script>
+    let startTime, timerInterval, selectedWord = null;
+
+    const allWords = [
+        "(χ＋ｙ)²－2χｙ", 
+        "(χ＋ｙ)³－3χｙ(χ＋ｙ)", 
+        "(χ＋ｙ)²＋2χｙ", 
+        "(χ－ｙ)²＋2χｙ", 
+        "(χ＋ｙ)³＋3χｙ(χ＋ｙ)", 
+        "(χ＋ｙ)³－3χｙ(χ－ｙ)"
+    ];
+
+    function startChallenge() {
+        const blanks = document.querySelectorAll('.blank');
+        const bankContainer = document.getElementById('word-bank-container');
+        const bank = document.getElementById('word-bank');
+        bank.innerHTML = ''; 
+        bankContainer.style.display = 'block';
+        
+        blanks.forEach(b => {
+            b.classList.remove('initial'); 
+            b.classList.add('challenge'); 
+            b.innerText = '';
+            b.onclick = function() {
+                if(this.innerText !== '') {
+                    const usedId = this.getAttribute('data-used-id');
+                    const returnItem = document.getElementById(usedId);
+                    if (returnItem) returnItem.classList.remove('used');
+                    this.innerText = ''; 
+                    this.classList.remove('filled');
+                }
+                if(selectedWord) {
+                    this.innerText = selectedWord.innerText;
+                    this.classList.add('filled');
+                    this.setAttribute('data-used-id', selectedWord.id);
+                    selectedWord.classList.add('used');
+                    selectedWord.classList.remove('selected');
+                    selectedWord = null;
+                }
+            };
+        });
+
+        const shuffled = [...allWords].sort(() => Math.random() - 0.5);
+        shuffled.forEach((w, i) => {
+            const d = document.createElement('div');
+            d.className = 'word-item'; d.id = 'word-' + i; d.innerText = w;
+            d.onclick = function(e) {
+                e.stopPropagation();
+                document.querySelectorAll('.word-item').forEach(item => item.classList.remove('selected'));
+                selectedWord = this; 
+                this.classList.add('selected');
+            };
+            bank.appendChild(d);
+        });
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            const diff = (Date.now() - startTime) / 1000;
+            document.getElementById('timer').innerText = diff.toFixed(1).padStart(6, '0');
+        }, 100);
+    }
+
+    function checkAnswers() {
+        let ok = true;
+        document.querySelectorAll('.blank').forEach(b => {
+            if(b.innerText === b.getAttribute('data-ans')) { 
+                b.classList.add('correct'); 
+            } else {
+                const usedId = b.getAttribute('data-used-id');
+                const returnItem = document.getElementById(usedId);
+                if (returnItem) returnItem.classList.remove('used');
+                b.innerText = ''; b.classList.remove('filled'); ok = false;
+            }
+        });
+        if(ok) { clearInterval(timerInterval); alert("合格！素晴らしい。"); }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>数学Ⅰ：tenkai5</title>
+    <style>
+        :root { --bg-color:#f8f9fa; --drop-zone-bg:#fff9c4; }
+        body{font-family:sans-serif;background:var(--bg-color);margin:0;padding:0 16px;overflow-x:hidden;box-sizing:border-box;}
+        .sticky-header{position:sticky;top:0;background:var(--bg-color);padding:10px 16px;z-index:1000;border-bottom:2px solid #ddd;box-sizing:border-box;}
+        .page-nav{max-width:900px;margin:0 auto 10px;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
+        .nav-btn{text-decoration:none;background:#7f8c8d;color:white;padding:6px 14px;border-radius:20px;font-size:0.85em;font-weight:bold;transition:0.2s;white-space:nowrap;}
+        .nav-btn:hover{background:#34495e;} .nav-btn.index-btn{background:#1a5276;}
+        .lv-banner{max-width:900px;margin:0 auto 10px;background:#d6eaf8;border-left:6px solid #1a5276;border-radius:0 8px 8px 0;padding:10px 16px;font-size:13px;color:#1a5276;font-weight:bold;}
+        .challenge-panel{background:#eaf0fb;border:1.5px solid #aed6f1;color:#1a5276;padding:10px 20px;border-radius:8px;display:flex;justify-content:space-around;align-items:center;max-width:900px;margin:0 auto 10px;}
+        .timer{font-size:1.5em;color:#1a5276;font-family:monospace;font-weight:bold;}
+        .word-bank-container{background:#eee;padding:12px 16px;border-radius:8px;border:1px solid #ccc;max-width:900px;margin:0 auto;}
+        .word-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:40px;}
+        .drag-item{background:#fff;color:#c0392b;border:1px solid #333;padding:5px 14px;cursor:pointer;font-weight:bold;font-size:1em;border-radius:3px;user-select:none;}
+        .drag-item.selected{background:#f1c40f;color:#333;box-shadow:0 0 0 3px #e67e22;transform:scale(1.08);}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+        .word-bank-container.shake{animation:shake 0.4s ease;}
+        .container{max-width:900px;margin:20px auto;background:white;padding:24px;border-radius:12px;}
+        .sec-title{font-weight:900;font-size:1.1em;color:#2980b9;border-left:6px solid #2980b9;padding-left:10px;margin-bottom:14px;margin-top:24px;}
+        .formula-box{background:#eaf0fb;border:2px solid #aed6f1;border-radius:10px;padding:16px 20px;margin-bottom:18px;text-align:center;}
+        .formula-main{font-size:1.3em;font-weight:900;color:#1a5276;line-height:2.1;}
+        .point-box{border-radius:9px;padding:12px 16px;margin-bottom:14px;border-left:4px solid;font-size:14px;line-height:2;}
+        .point-box.yellow{background:#fef9e7;border-color:#f39c12;}
+        .point-box.yellow h4{color:#e67e22;font-size:12px;font-weight:900;margin:0 0 5px;}
+        .point-box.red{background:#fdedec;border-color:#e74c3c;}
+        .point-box.red h4{color:#e74c3c;font-size:12px;font-weight:900;margin:0 0 5px;}
+        .exp-box{background:#f4f6f8;border-radius:9px;padding:12px 16px;margin-bottom:10px;border-left:4px solid #27ae60;font-size:14px;line-height:2;display:none;}
+        .exp-box.blue{border-left-color:#2980b9;} .exp-box.blue h4{color:#2980b9;}
+        .exp-box.orange{border-left-color:#e67e22;} .exp-box.orange h4{color:#e67e22;}
+        .exp-box h4{font-size:12px;color:#27ae60;font-weight:900;margin-bottom:5px;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        .reveal-btn{background:#2980b9;color:white;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:bold;cursor:pointer;margin-top:8px;font-family:sans-serif;}
+        .reveal-btn:hover{background:#1a5276;}
+        .reidai-box{background:#fafcff;border:2px solid #aed6f1;border-radius:10px;padding:20px 24px;margin-bottom:24px;}
+        .ruidai-box{background:#fffdf5;border:2px solid #f9e4b0;border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+        .ruidai-title{font-weight:900;font-size:1em;color:#e67e22;margin-bottom:14px;border-left:6px solid #e67e22;padding-left:10px;}
+        .test-box{background:#fdf2f8;border:2px solid #d7bde2;border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+        .test-title{font-weight:900;font-size:1em;color:#8e44ad;margin-bottom:14px;border-left:6px solid #8e44ad;padding-left:10px;}
+        .q-text{font-size:14.5px;line-height:1.9;margin-bottom:14px;background:#f0f6ff;border-radius:6px;padding:10px 14px;}
+        .step-area{font-size:14.5px;line-height:2.4;}
+        .step-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+        .step-label{color:#888;min-width:70px;font-size:13px;flex-shrink:0;}
+        .phase-bar{background:#eaf0fb;border-left:4px solid #2980b9;padding:4px 10px;border-radius:0 4px 4px 0;font-size:12px;font-weight:bold;color:#2980b9;margin:8px 0 6px;}
+        .math{font-style:italic;color:#1a5276;font-weight:bold;}
+        .math-r{font-style:italic;color:#c0392b;font-weight:bold;}
+        .drop-zone-inline{display:inline-flex;align-items:center;justify-content:center;min-width:60px;min-height:2em;background:var(--drop-zone-bg);border:1.5px solid #aaa;vertical-align:middle;cursor:pointer;text-align:center;font-weight:bold;color:#c0392b;padding:2px 8px;border-radius:3px;font-size:14px;transition:background .15s;}
+        .drop-zone-inline:hover{border-color:#e67e22;background:#fff3cd;}
+        .drop-zone-inline.correct{background:#d4edda!important;border:2px solid #28a745!important;color:#155724!important;}
+        .drop-zone-inline.wrong{background:#f8d7da!important;border:2px solid #dc3545!important;}
+        .drop-zone-inline.wide{min-width:90px;} .drop-zone-inline.xw{min-width:150px;}
+        .ans-row{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+        .score-panel{background:#eafaf1;border:2px solid #27ae60;border-radius:10px;padding:14px 20px;text-align:center;margin-top:16px;display:none;}
+        .score-panel.fail{background:#fdedec;border-color:#e74c3c;}
+        .score-big{font-size:2em;font-weight:900;color:#27ae60;}
+        .score-panel.fail .score-big{color:#e74c3c;}
+        .controls{text-align:center;margin-top:30px;padding-bottom:100px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+        .main-btn{padding:13px 28px;font-size:1rem;cursor:pointer;border:none;border-radius:8px;font-weight:bold;color:white;}
+        .btn-start{background:#27ae60;} .btn-check{background:#e67e22;} .btn-show{background:#7f8c8d;}
+        #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+    </style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="sticky-header">
+    <nav class="page-nav" id="topnav"></nav>
+    <div class="lv-banner" id="lvbanner"></div>
+    <div class="challenge-panel">
+        <div>TIME: <span id="timerDisplay" class="timer">00:00.0</span></div>
+        <div id="recordDisplay" style="font-size:0.8em;">記録なし</div>
+    </div>
+    <div class="word-bank-container">
+        <div id="wordBank" class="word-bank">「チャレンジ開始」をクリックしてください。</div>
+    </div>
+</div>
+<div class="container" id="main-content"></div>
+<div class="controls">
+    <button class="main-btn btn-start" onclick="stCh()">▶ チャレンジ開始</button>
+    <button class="main-btn btn-check" onclick="chAn()">✔ 答え合わせ</button>
+    <button class="main-btn btn-show"  onclick="shMo()">👁 お手本を見る</button>
+</div>
+<div style="position:fixed;bottom:110px;left:16px;z-index:3000;">
+    <button id="reviewBtn" onclick="toggleReview()" style="background:#f39c12;color:white;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:bold;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;">
+        <span id="reviewIcon">☆</span><span id="reviewText">復習リストに追加</span>
+    </button>
+</div>
+<script>
+var UNIT_KEY='tenkai5';
+var isRunning=false,sW=null,sT,tI,bestTime=null;
+function setZone(z,val){z.innerHTML=val;z.setAttribute('data-filled',val);}
+function getZoneVal(z){return z.getAttribute('data-filled')||z.innerText.trim();}
+function clearZoneEl(z){z.innerHTML='';z.removeAttribute('data-filled');z.classList.remove('correct','wrong');}
+function addToBank(word){var b=document.getElementById('wordBank'),d=document.createElement('div');d.className='drag-item';d.setAttribute('data-val',word);d.innerText=word;d.onclick=function(){if(sW)sW.classList.remove('selected');if(sW===this){sW=null;return;}sW=this;this.classList.add('selected');};b.appendChild(d);}
+function zCl(z){if(!isRunning)return;var cur=getZoneVal(z);if(cur!==''){addToBank(cur);clearZoneEl(z);return;}if(sW){var val=sW.getAttribute('data-val')||sW.innerText;setZone(z,val);sW.remove();sW=null;}}
+function fmtTime(ms){var t=ms/1000;return Math.floor(t/60).toString().padStart(2,'0')+':'+((t%60).toFixed(1)).padStart(4,'0');}
+function stCh(){isRunning=true;sW=null;sT=Date.now();clearInterval(tI);tI=setInterval(function(){document.getElementById('timerDisplay').innerText=fmtTime(Date.now()-sT);},100);var zones=document.querySelectorAll('.drop-zone-inline'),allAns=[];zones.forEach(function(z){allAns.push(z.getAttribute('data-ans'));clearZoneEl(z);});var b=document.getElementById('wordBank');b.innerHTML='';allAns.sort(function(){return Math.random()-0.5;});allAns.forEach(function(w){addToBank(w);});document.getElementById('score-panel').style.display='none';}
+function chAn(){if(!isRunning)return;var ok=true,correct=0,total=0;document.querySelectorAll('.drop-zone-inline').forEach(function(z){var ans=z.getAttribute('data-ans'),cur=getZoneVal(z);total++;if(cur===ans){z.classList.add('correct');z.classList.remove('wrong');correct++;}else{z.classList.add('wrong');z.classList.remove('correct');ok=false;if(cur!==''){addToBank(cur);clearZoneEl(z);}}});if(ok){clearInterval(tI);isRunning=false;var el=Date.now()-sT;if(bestTime===null||el<bestTime){bestTime=el;document.getElementById('recordDisplay').innerText='🏆 ベスト: '+fmtTime(bestTime);}startCnf();showScore(correct,total);}else{var wbc=document.querySelector('.word-bank-container');wbc.classList.remove('shake');void wbc.offsetWidth;wbc.classList.add('shake');setTimeout(function(){wbc.classList.remove('shake');},500);}}
+function shMo(){clearInterval(tI);isRunning=false;sW=null;document.querySelectorAll('.drop-zone-inline').forEach(function(z){setZone(z,z.getAttribute('data-ans'));z.classList.remove('correct','wrong');});document.getElementById('wordBank').innerHTML='<span style="color:#888;font-size:0.9em;">お手本表示中。「チャレンジ開始」で練習できます。</span>';document.getElementById('timerDisplay').innerText='00:00.0';}
+function showScore(c,t){var pass=c>=5,panel=document.getElementById('score-panel');panel.className='score-panel'+(pass?'':' fail');panel.style.display='block';document.getElementById('score-text').innerText=c+' / '+t+' 問正解';document.getElementById('score-msg').innerText=pass?'🎉 合格！すばらしい！':'もう少し！復習してもう一度挑戦しよう。';}
+var stepRevState={e1:0};
+function revealStep(qid,total){var r=stepRevState[qid],el=document.getElementById(qid+'-s'+r);if(el){el.style.display='block';stepRevState[qid]++;setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}var btn=document.getElementById('rb-'+qid);if(stepRevState[qid]>=total){btn.style.display='none';}else{btn.innerText='▶ STEP '+(stepRevState[qid]+1)+' を見る';}}
+var cvs=document.getElementById("confetti-canvas"),ctx2=cvs.getContext("2d"),pts=[],cnfRunning=false;
+function startCnf(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;pts=[];for(var i=0;i<180;i++)pts.push({x:Math.random()*cvs.width,y:Math.random()*cvs.height-cvs.height,s:Math.random()*9+4,c:'hsl('+Math.floor(Math.random()*360)+',75%,65%)',sp:Math.random()*3+2});cnfRunning=true;updateCnf();setTimeout(function(){cnfRunning=false;ctx2.clearRect(0,0,cvs.width,cvs.height);pts=[];},4000);}
+function updateCnf(){if(!cnfRunning)return;ctx2.clearRect(0,0,cvs.width,cvs.height);pts.forEach(function(p){p.y+=p.sp;ctx2.fillStyle=p.c;ctx2.fillRect(p.x,p.y,p.s,p.s);if(p.y>cvs.height)p.y=-20;});requestAnimationFrame(updateCnf);}
+(function(){try{var d=JSON.parse(localStorage.getItem('study_'+UNIT_KEY)||'{"count":0,"review":false}');d.count=(d.count||0)+1;d.lastDate=new Date().toLocaleDateString('ja-JP');localStorage.setItem('study_'+UNIT_KEY,JSON.stringify(d));}catch(e){}})();
+function toggleReview(){try{var d=JSON.parse(localStorage.getItem('study_'+UNIT_KEY)||'{"count":0,"review":false}');d.review=!d.review;localStorage.setItem('study_'+UNIT_KEY,JSON.stringify(d));updateReviewBtn(d.review);}catch(e){}}
+function updateReviewBtn(r){document.getElementById('reviewIcon').innerText=r?'★':'☆';document.getElementById('reviewText').innerText=r?'復習リストに追加済み':'復習リストに追加';document.getElementById('reviewBtn').style.background=r?'#e74c3c':'#f39c12';}
+(function(){try{var d=JSON.parse(localStorage.getItem('study_'+UNIT_KEY)||'{"count":0,"review":false}');updateReviewBtn(d.review||false);}catch(e){}})();
+</script>
+<script>
+/* ── 単元固有コンテンツ ── */
+var PAGES = {
+    tenkai3: {
+        prev:'tenkai2.html', prevL:'② (a＋b)³',
+        next:'tenkai4.html', nextL:'④ a³±b³',
+        lv:'📘 標準レベル — 1・4項目がマイナスになるパターンをしっかり覚えよう！',
+        title:'③ (a－b)³ の展開',
+        formula:'(a－b)³ ＝ a³<span style="color:#e74c3c">－</span>3a²b＋3ab²<span style="color:#e74c3c">－</span>b³',
+        formulaSub:'1・4項目がマイナス、2・3項目はプラス<br>符号パターン：<strong style="color:#c0392b">＋ － ＋ －</strong>',
+        pointHTML:'<div class="point-box yellow"><h4>💡 (a＋b)³ との違い</h4>(a＋b)³：符号 ＋ ＋ ＋ ＋<br>(a－b)³：符号 ＋ <span style="color:#c0392b">－</span> ＋ <span style="color:#c0392b">－</span>（1・4番目がマイナス）<br>→ b を「－b」として代入すると覚えやすい！</div>'
+                   +'<div class="point-box red"><h4>⚠ よくあるミス</h4>全部プラスにしてしまわない！<br><strong>1番目と4番目は必ずマイナス！</strong></div>',
+        example:{q:'(x－2)³ を展開しなさい。',steps:[
+            {c:'green', t:'STEP 1 — a, b を確認', b:'a ＝ x，b ＝ <strong style="color:#c0392b">2</strong>'},
+            {c:'blue',  t:'STEP 2 — 各項を計算（符号に注意）', b:'＋a³ ＝ x³<br><span style="color:#c0392b">－</span>3a²b ＝ <span style="color:#c0392b">－</span>3×x²×2 ＝ <span style="color:#c0392b">－6x²</span><br>＋3ab² ＝ 3×x×4 ＝ ＋12x<br><span style="color:#c0392b">－</span>b³ ＝ <span style="color:#c0392b">－</span>2³ ＝ <span style="color:#c0392b">－8</span>'},
+            {c:'orange',t:'STEP 3 — まとめて答え', b:'<strong style="font-size:1.15em;color:#1a5276">x³<span style="color:#c0392b">－</span>6x²＋12x<span style="color:#c0392b">－</span>8</strong>'},
+            {c:'green', t:'STEP 4 — 符号チェック', b:'符号 ＋ <span style="color:#c0392b">－</span> ＋ <span style="color:#c0392b">－</span> ✓（1・4番目がマイナス）'},
+        ]},
+        quizData:[
+            {q:'(x－4)³ の定数項は？',choices:['64','－64','16','－16'],ans:1,sol:'定数項 = -b³ = -(4³) = -64（符号マイナス）'},
+            {q:'(x－3y)³ の x²y の係数は？',choices:['－3','－6','－9','－27'],ans:2,sol:'-3a²b = -3×x²×3y = -9x²y → 係数は-9'},
+            {q:'(2a－3b)³ の a²b の係数は？',choices:['－36','36','－54','54'],ans:2,sol:'-3×(2a)²×(3b) = -3×4a²×3b = -36a²b … 正：係数=-(3×4×3)=-36，正解は-36'},
+            {q:'(3x－4)³ の x² の係数は？',choices:['－108','108','－36','36'],ans:0,sol:'-3a²b = -3×(3x)²×4 = -3×9x²×4 = -108x² → 係数は-108'},
+        ],
+        testHTML: function(){
+            return '<div class="phase-bar">問1</div><div class="q-text">(x－1)³ を展開しなさい。</div><div class="step-area">'
+                +'<div class="step-row"><span class="step-label">a³</span><span class="drop-zone-inline" data-ans="x³" onclick="zCl(this)"></span></div>'
+                +'<div class="step-row"><span class="step-label">－3a²b</span>－3×x²×1 ＝ <span class="drop-zone-inline" data-ans="－3x²" onclick="zCl(this)"></span></div>'
+                +'<div class="step-row"><span class="step-label">＋3ab²</span>3×x×1 ＝ <span class="drop-zone-inline" data-ans="3x" onclick="zCl(this)"></span></div>'
+                +'<div class="step-row"><span class="step-label">－b³</span>－1 ＝ <span class="drop-zone-inline" data-ans="－1" onclick="zCl(this)"></span></div>'
+                +'<div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="x³－3x²＋3x－1" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問2</div><div class="q-text">(x－5y)³ の x²y の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">－3a²b の項</span>－3×x²×5y ＝ <span class="drop-zone-inline" data-ans="－15x²y" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="－15" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問3</div><div class="q-text">(2a－3b)³ の a³ の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">a³ の項</span>(2a)³ ＝ <span class="drop-zone-inline" data-ans="8a³" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="8" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問4</div><div class="q-text">(3x－4)³ の定数項は？</div><div class="step-area"><div class="step-row"><span class="step-label">－b³</span>－(4³) ＝ <span class="drop-zone-inline" data-ans="－64" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問5</div><div class="q-text">(x－2y)³ を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">a³</span><span class="drop-zone-inline" data-ans="x³" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">－3a²b</span><span class="drop-zone-inline" data-ans="－6x²y" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">＋3ab²</span><span class="drop-zone-inline" data-ans="12xy²" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">－b³</span><span class="drop-zone-inline" data-ans="－8y³" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="x³－6x²y＋12xy²－8y³" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問6</div><div class="q-text">(2x－3y)³ の xy² の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">3ab² の項</span>3×2x×(3y)² ＝ 3×2x×9y² ＝ <span class="drop-zone-inline" data-ans="54xy²" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="54" onclick="zCl(this)"></span></div></div>'
+                +'<div id="score-panel" class="score-panel"><div class="score-big" id="score-text"></div><div id="score-msg" style="margin-top:6px;font-size:14px;"></div></div>';
+        }
+    },
+    tenkai4: {
+        prev:'tenkai3.html', prevL:'③ (a－b)³',
+        next:'tenkai5.html', nextL:'⑤ (a＋b＋c)²',
+        lv:'📘 標準レベル — 外の符号と真ん中 ab の符号が「逆」になることを覚えよう！',
+        title:'④ a³±b³ の展開',
+        formula:'(a＋b)(a²<span style="color:#e74c3c">－</span>ab＋b²) ＝ a³＋b³<br>(a－b)(a²<span style="color:#2980b9">＋</span>ab＋b²) ＝ a³－b³',
+        formulaSub:'外の符号と真ん中 ab の符号は「逆」になる！<br>a³＋b³：(a<span style="color:#c0392b">＋</span>b)(a²<span style="color:#c0392b">－</span>ab＋b²)　　a³－b³：(a<span style="color:#2980b9">－</span>b)(a²<span style="color:#2980b9">＋</span>ab＋b²)',
+        pointHTML:'<div class="point-box yellow"><h4>💡 符号の覚え方</h4>和型（a³＋b³）：(a＋b)(a² <strong style="color:#c0392b">－</strong> ab＋b²)　→ 真ん中は <strong style="color:#c0392b">マイナス</strong><br>差型（a³－b³）：(a－b)(a² <strong style="color:#2980b9">＋</strong> ab＋b²)　→ 真ん中は <strong style="color:#2980b9">プラス</strong></div>',
+        example:{q:'(x＋2y)(x²－2xy＋4y²) を展開しなさい。',steps:[
+            {c:'green', t:'STEP 1 — 形を確認', b:'真ん中「－2xy」→ 符号が「－」→ a³＋b³ 型<br>a＝x，b＝2y（∵ b²＝4y²）'},
+            {c:'blue',  t:'STEP 2 — 対応を確認', b:'a²＝x²，ab＝x×2y＝2xy，b²＝4y² ✓'},
+            {c:'orange',t:'STEP 3 — 答え', b:'a³＋b³ ＝ x³＋(2y)³ ＝ <strong style="font-size:1.15em;color:#1a5276">x³＋8y³</strong>'},
+        ]},
+        quizData:[
+            {q:'(x＋3)(x²－3x＋9) を展開すると？',choices:['x³＋27','x³－27','x³＋9','x³＋3'],ans:0,sol:'真ん中-3x → a³+b³型。a=x, b=3 → x³+3³=x³+27'},
+            {q:'(x－5y)(x²＋5xy＋25y²) を展開すると？',choices:['x³＋125y³','x³－125y³','x³＋25y³','x³－25y³'],ans:1,sol:'真ん中+5xy → a³-b³型。a=x, b=5y → x³-(5y)³=x³-125y³'},
+            {q:'(2x＋3)(4x²－6x＋9) を展開すると？',choices:['8x³＋27','8x³－27','4x³＋27','8x³＋9'],ans:0,sol:'真ん中-6x → a³+b³型。a=2x, b=3 → (2x)³+3³=8x³+27'},
+            {q:'(2a－1)(4a²＋2a＋1) を展開すると？',choices:['8a³＋1','8a³－1','4a³－1','2a³－1'],ans:1,sol:'真ん中+2a → a³-b³型。a=2a, b=1 → (2a)³-1=8a³-1'},
+        ],
+        testHTML: function(){
+            return '<div class="phase-bar">問1</div><div class="q-text">(x＋2)(x²－2x＋4) を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">型の確認</span>真ん中の符号：<span class="drop-zone-inline" data-ans="－2x" onclick="zCl(this)"></span> → <span class="drop-zone-inline" data-ans="a³＋b³型" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">a, b</span>a＝<span class="drop-zone-inline" data-ans="x" onclick="zCl(this)"></span>，b＝<span class="drop-zone-inline" data-ans="2" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="x³＋8" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問2</div><div class="q-text">(x－3y)(x²＋3xy＋9y²) を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">型の確認</span>真ん中の符号：<span class="drop-zone-inline" data-ans="＋3xy" onclick="zCl(this)"></span> → <span class="drop-zone-inline" data-ans="a³－b³型" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="x³－27y³" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問3</div><div class="q-text">(2x＋3)(4x²－6x＋9) を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">a, b</span>a＝<span class="drop-zone-inline" data-ans="2x" onclick="zCl(this)"></span>，b＝<span class="drop-zone-inline" data-ans="3" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="8x³＋27" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問4</div><div class="q-text">(x＋4y)(x²－4xy＋16y²) を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">b の値</span>b²＝16y² → b＝<span class="drop-zone-inline" data-ans="4y" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="x³＋64y³" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問5</div><div class="q-text">(3x＋5y)(9x²－15xy＋25y²) を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">a, b</span>a＝<span class="drop-zone-inline" data-ans="3x" onclick="zCl(this)"></span>，b＝<span class="drop-zone-inline" data-ans="5y" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="27x³＋125y³" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問6</div><div class="q-text">(2a－1)(4a²＋2a＋1) を展開しなさい。</div><div class="step-area"><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline" data-ans="8a³－1" onclick="zCl(this)"></span></div></div>'
+                +'<div id="score-panel" class="score-panel"><div class="score-big" id="score-text"></div><div id="score-msg" style="margin-top:6px;font-size:14px;"></div></div>';
+        }
+    },
+    tenkai5: {
+        prev:'tenkai4.html', prevL:'④ a³±b³',
+        next:'insu1.html', nextL:'⑥ acx²因数分解',
+        lv:'📙 応用レベル — 異なる2つの積は必ず2倍になることを面積で理解しよう！',
+        title:'⑤ (a＋b＋c)² の展開',
+        formula:'(a＋b＋c)² ＝ a²＋b²＋c²＋2ab＋2bc＋2ca',
+        formulaSub:'各自の2乗の和 ＋ 異なる2つの積を2倍した和<br>マイナスがある場合は ( ) をつけて代入！',
+        pointHTML:'<div class="point-box yellow"><h4>💡 具体例で確認</h4>(2x－3y＋5)² を展開すると…<br>a=2x, b=-3y, c=5 として<br>a²=(2x)²=4x²，b²=(-3y)²=9y²，c²=25<br>2ab=2×2x×(-3y)=-12xy，2bc=2×(-3y)×5=-30y，2ca=2×5×2x=20x<br>→ <strong>4x²＋9y²＋25－12xy－30y＋20x</strong></div>'
+                  +'<div class="point-box red"><h4>⚠ よくあるミス</h4>b や c がマイナスのとき ( ) をつけ忘れない！<br>例：b=－3y → b²=(－3y)²=9y²（マイナスが消える）</div>',
+        example:{q:'(2x－3y＋5)² を展開しなさい。',steps:[
+            {c:'green', t:'STEP 1 — a, b, c を設定', b:'a＝2x，b＝<span style="color:#c0392b">－3y</span>，c＝5'},
+            {c:'blue',  t:'STEP 2 — 各自の2乗', b:'a²＝(2x)²＝4x²，b²＝(－3y)²＝9y²，c²＝25'},
+            {c:'orange',t:'STEP 3 — 異なる2つ×2', b:'2ab＝2×2x×(－3y)＝<span style="color:#c0392b">－12xy</span><br>2bc＝2×(－3y)×5＝<span style="color:#c0392b">－30y</span><br>2ca＝2×5×2x＝＋20x'},
+            {c:'green', t:'STEP 4 — まとめ', b:'<strong style="font-size:1.1em;color:#1a5276">4x²＋9y²＋25－12xy－30y＋20x</strong>'},
+        ]},
+        quizData:[
+            {q:'(x＋y＋2)² の xy の係数は？',choices:['1','2','4','0'],ans:1,sol:'2ab = 2×x×y = 2xy → 係数は2'},
+            {q:'(x－y－z)² の yz の係数は？',choices:['－2','2','－1','1'],ans:1,sol:'2bc = 2×(-y)×(-z) = +2yz → 係数は2'},
+            {q:'(2x－y＋3)² の x² の係数は？',choices:['1','2','4','9'],ans:2,sol:'a² = (2x)² = 4x² → 係数は4'},
+            {q:'(x－3y＋2z)² の xy の係数は？',choices:['－6','6','－3','3'],ans:0,sol:'2ab = 2×x×(-3y) = -6xy → 係数は-6'},
+        ],
+        testHTML: function(){
+            return '<div class="phase-bar">問1</div><div class="q-text">(x＋y＋2)² を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">各自の2乗</span>x²＋y²＋<span class="drop-zone-inline" data-ans="4" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">2ab</span>2×x×y ＝ <span class="drop-zone-inline" data-ans="2xy" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">2bc</span>2×y×2 ＝ <span class="drop-zone-inline" data-ans="4y" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">2ca</span>2×2×x ＝ <span class="drop-zone-inline" data-ans="4x" onclick="zCl(this)"></span></div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="x²＋y²＋4＋2xy＋4y＋4x" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問2</div><div class="q-text">(x－3y＋2z)² の xy の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">2ab</span>2×x×(－3y) ＝ <span class="drop-zone-inline" data-ans="－6xy" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="－6" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問3</div><div class="q-text">(2x＋y－z)² の xz の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">2ca</span>2×(－z)×2x ＝ <span class="drop-zone-inline" data-ans="－4xz" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="－4" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問4</div><div class="q-text">(a＋2b－1)² の 4ab の係数と符号は？</div><div class="step-area"><div class="step-row"><span class="step-label">2ab</span>2×a×2b ＝ <span class="drop-zone-inline" data-ans="4ab" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="4" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問5</div><div class="q-text">(x－y－z)² の yz の係数は？</div><div class="step-area"><div class="step-row"><span class="step-label">2bc</span>2×(－y)×(－z) ＝ <span class="drop-zone-inline" data-ans="2yz" onclick="zCl(this)"></span>　係数は <span class="drop-zone-inline" data-ans="2" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問6</div><div class="q-text">(2x－y＋3)² を展開しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">各自の2乗</span>(2x)²＋(－y)²＋3² ＝ <span class="drop-zone-inline" data-ans="4x²＋y²＋9" onclick="zCl(this)"></span></div><div class="step-row"><span class="step-label">2ab, 2bc, 2ca</span><span class="drop-zone-inline" data-ans="－4xy" onclick="zCl(this)"></span>，<span class="drop-zone-inline" data-ans="－6y" onclick="zCl(this)"></span>，<span class="drop-zone-inline" data-ans="12x" onclick="zCl(this)"></span></div></div>'
+                +'<div id="score-panel" class="score-panel"><div class="score-big" id="score-text"></div><div id="score-msg" style="margin-top:6px;font-size:14px;"></div></div>';
+        }
+    },
+    insu1: {
+        prev:'tenkai5.html', prevL:'⑤ (a＋b＋c)²',
+        next:'index.html', nextL:'目次へ',
+        lv:'📙 応用レベル — たすきがけのパターンを丁寧に試そう！',
+        title:'⑥ acx² 型の因数分解（たすきがけ）',
+        formula:'acx²＋(ad＋bc)x＋bd ＝ (ax＋b)(cx＋d)',
+        formulaSub:'たすきがけ：x²の係数と定数項をそれぞれ分解し、斜めに掛けた和がxの係数と一致する組を探す',
+        pointHTML:'<div class="point-box yellow"><h4>💡 たすきがけのやり方</h4>例：2x²＋5x＋3<br>x²の係数2 → 2と1に分ける<br>定数3 → 1と3に分ける<br>2x×1＝2x，1x×3＝3x → 合計2x＋3x＝5x ✓<br>→ <strong>(2x＋3)(x＋1)</strong></div>'
+                  +'<div class="point-box red"><h4>⚠ 確認方法</h4>答えを展開して元の式に戻るか必ず確認！<br>(2x＋3)(x＋1) ＝ 2x²＋2x＋3x＋3 ＝ 2x²＋5x＋3 ✓</div>',
+        example:{q:'3x²＋7x＋2 を因数分解しなさい。',steps:[
+            {c:'green', t:'STEP 1 — x²の係数を分解', b:'3 ＝ 3×1'},
+            {c:'blue',  t:'STEP 2 — たすきがけで試す', b:'定数2＝1×2 を試す<br>3x×2 ＝ 6x，1x×1 ＝ 1x　合計 6x＋1x ＝ 7x ✓'},
+            {c:'orange',t:'STEP 3 — 答え', b:'<strong style="font-size:1.15em;color:#1a5276">(3x＋1)(x＋2)</strong>'},
+            {c:'green', t:'STEP 4 — 確認', b:'(3x＋1)(x＋2) ＝ 3x²＋6x＋x＋2 ＝ 3x²＋7x＋2 ✓'},
+        ]},
+        quizData:[
+            {q:'3x²＋7x＋2 を因数分解すると？',choices:['(3x＋2)(x＋1)','(3x＋1)(x＋2)','(3x－1)(x＋2)','(x＋2)(x－1)'],ans:1,sol:'3x×2=6x, 1x×1=x → 合計7x ✓ → (3x+1)(x+2)'},
+            {q:'6x²－7x＋2 を因数分解すると？',choices:['(3x－1)(2x－2)','(3x＋2)(2x－1)','(3x－2)(2x－1)','(2x－2)(3x－1)'],ans:2,sol:'3x×(-1)=-3x, 2x×(-2)=-4x → 合計-7x ✓ → (3x-2)(2x-1)'},
+            {q:'5x²＋7x－6 を因数分解すると？',choices:['(5x＋3)(x－2)','(5x－3)(x＋2)','(5x＋2)(x－3)','(5x－2)(x＋3)'],ans:1,sol:'5x×2=10x, 1x×(-3)=-3x → 合計7x ✓ → (5x-3)(x+2)'},
+            {q:'6x²＋13x＋6 を因数分解すると？',choices:['(3x＋2)(2x＋3)','(2x＋2)(3x＋3)','(6x＋1)(x＋6)','(3x＋3)(2x＋2)'],ans:0,sol:'3x×3=9x, 2x×2=4x → 合計13x ✓ → (3x+2)(2x+3)'},
+        ],
+        testHTML: function(){
+            return '<div class="phase-bar">問1</div><div class="q-text">2x²＋5x＋3 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">たすきがけ</span>2x×<span class="drop-zone-inline" data-ans="1" onclick="zCl(this)"></span>＝2x，1x×<span class="drop-zone-inline" data-ans="3" onclick="zCl(this)"></span>＝3x → 合計 <span class="drop-zone-inline" data-ans="5x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(2x＋3)(x＋1)" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問2</div><div class="q-text">6x²－13x＋5 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">合計</span>3x×(－1)＝－3x，2x×(－5)＝－10x → <span class="drop-zone-inline" data-ans="－13x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(3x－5)(2x－1)" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問3</div><div class="q-text">5x²＋7x－6 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">合計</span>5x×2＝10x，1x×(－3)＝－3x → <span class="drop-zone-inline" data-ans="7x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(5x－3)(x＋2)" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問4</div><div class="q-text">7x²－19x－6 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">合計</span>7x×(－3)＝－21x，1x×2＝2x → <span class="drop-zone-inline" data-ans="－19x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(7x＋2)(x－3)" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問5</div><div class="q-text">6x²＋17x＋5 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">合計</span>3x×5＝15x，2x×1＝2x → <span class="drop-zone-inline" data-ans="17x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(3x＋1)(2x＋5)" onclick="zCl(this)"></span></div></div>'
+                +'<div class="phase-bar" style="margin-top:16px;">問6</div><div class="q-text">10x²＋21x＋9 を因数分解しなさい。</div><div class="step-area"><div class="step-row"><span class="step-label">合計</span>5x×3＝15x，2x×3＝6x → <span class="drop-zone-inline" data-ans="21x" onclick="zCl(this)"></span>✓</div><div class="ans-row"><span style="font-weight:900;color:#1a5276;">答え：</span><span class="drop-zone-inline xw" data-ans="(5x＋3)(2x＋3)" onclick="zCl(this)"></span></div></div>'
+                +'<div id="score-panel" class="score-panel"><div class="score-big" id="score-text"></div><div id="score-msg" style="margin-top:6px;font-size:14px;"></div></div>';
+        }
+    },
+};
+
+var P = PAGES[UNIT_KEY];
+// ナビ
+document.getElementById('topnav').innerHTML=
+    '<a href="'+P.prev+'" class="nav-btn">◀ '+P.prevL+'</a>'
+    +'<a href="index.html" class="nav-btn index-btn">📋 目次</a>'
+    +'<a href="'+P.next+'" class="nav-btn">'+P.nextL+' ▶</a>';
+document.getElementById('lvbanner').textContent=P.lv;
+
+// コンテンツ構築
+var mc=document.getElementById('main-content');
+var html='<div class="sec-title">📌 公式と仕組み</div>';
+html+='<div class="formula-box"><div class="formula-main">'+P.formula+'</div><div style="font-size:13px;color:#555;margin-top:8px;line-height:1.9;">'+P.formulaSub+'</div></div>';
+html+=P.pointHTML;
+
+// 例題
+html+='<div class="sec-title">📝 例題</div><div class="reidai-box"><div class="phase-bar">例題</div><div class="q-text">'+P.example.q+'</div>';
+html+='<button class="reveal-btn" id="rb-e1" onclick="revealStep(\'e1\','+P.example.steps.length+')">▶ STEP 1 を見る</button>';
+P.example.steps.forEach(function(s,i){
+    html+='<div class="exp-box '+s.c+'" id="e1-s'+i+'"><h4>'+s.t+'</h4>'+s.b+'</div>';
+});
+html+='</div>';
+
+// 類題
+html+='<div class="sec-title">✏️ 類題（4択クイズ）</div><div id="quiz-area"></div>';
+
+// テスト
+html+='<div class="sec-title">🏆 テスト（チャレンジ）</div><div class="test-box"><div class="test-title">テスト — 6問に挑戦！（5問以上で合格）</div>'+P.testHTML()+'</div>';
+
+mc.innerHTML=html;
+
+// 類題
+var qi=0,qscore=0;
+function buildQuiz(){
+    var area=document.getElementById('quiz-area');area.innerHTML='';
+    if(qi>=P.quizData.length){area.innerHTML='<div class="score-panel" style="display:block;"><div class="score-big">'+qscore+'/'+P.quizData.length+'</div><button onclick="qi=0;qscore=0;buildQuiz();" style="margin-top:10px;background:#1a5276;color:white;border:none;padding:8px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">もう一度</button></div>';return;}
+    var d=P.quizData[qi],h='<div class="ruidai-box"><div class="ruidai-title">類題 '+(qi+1)+'/'+P.quizData.length+'</div><div class="q-text">'+d.q+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">';
+    ['①','②','③','④'].forEach(function(l,i){h+='<button onclick="ansQuiz('+i+')" id="qc'+i+'" style="padding:10px 8px;border:2px solid #ddd;border-radius:8px;background:white;font-size:14px;cursor:pointer;font-family:sans-serif;font-weight:bold;">'+l+'　'+d.choices[i]+'</button>';});
+    h+='</div><div id="qfb" style="display:none;border-radius:8px;padding:10px 14px;font-size:13px;"></div></div>';
+    area.innerHTML=h;
+}
+function ansQuiz(i){
+    var d=P.quizData[qi],fb=document.getElementById('qfb');
+    for(var j=0;j<4;j++){var b=document.getElementById('qc'+j);if(!b)continue;b.disabled=true;if(j===d.ans)b.style.background='#d4edda';else if(j===i&&i!==d.ans)b.style.background='#f8d7da';}
+    if(i===d.ans){fb.style.display='block';fb.style.background='#eafaf1';fb.style.border='1.5px solid #27ae60';fb.innerHTML='<strong style="color:#27ae60">✓ 正解！</strong><br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';qscore++;}
+    else{fb.style.display='block';fb.style.background='#fdedec';fb.style.border='1.5px solid #e74c3c';fb.innerHTML='<strong style="color:#e74c3c">✗ 不正解</strong>　正解：'+['①','②','③','④'][d.ans]+'<br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';}
+    fb.innerHTML+='<br><button onclick="qi++;buildQuiz();" style="margin-top:8px;background:#1a5276;color:white;border:none;padding:7px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">次の問題 →</button>';
+}
+buildQuiz();
+shMo();
+</script>
+</body>
+</html>

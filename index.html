@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>数学Ⅰ　展開と因数分解　目次</title>
+    <style>
+        :root { --bg-color: #f8f9fa; --line-green: #06C755; }
+        body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 0 16px 80px; box-sizing: border-box; }
+        .top-header { background: #1a5276; color: white; padding: 18px 24px; text-align: center; margin: 0 -16px 20px; }
+        .top-header h1 { margin: 0; font-size: 1.3em; letter-spacing: 2px; }
+        .top-header p { margin: 6px 0 0; font-size: 0.82em; opacity: 0.8; }
+        .container { max-width: 860px; margin: 0 auto; }
+        #reviewSection { display: none; background: #fff8f0; border: 2px solid #f39c12; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; }
+        #reviewSection h2 { margin: 0 0 12px; font-size: 1em; color: #e67e22; }
+        #reviewList { display: flex; flex-wrap: wrap; gap: 10px; }
+        .review-card { background: white; border: 2px solid #f39c12; border-radius: 8px; padding: 8px 14px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .review-card a { text-decoration: none; color: #1a5276; font-weight: bold; }
+        .review-card a:hover { text-decoration: underline; }
+        .review-remove { background: none; border: none; cursor: pointer; color: #aaa; font-size: 16px; padding: 0 2px; }
+        .review-remove:hover { color: #e74c3c; }
+        #statsBar { background: white; border: 1.5px solid #ddd; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+        .stat-item { display: flex; flex-direction: column; align-items: center; min-width: 70px; }
+        .stat-num { font-size: 1.8em; font-weight: 900; color: #1a5276; line-height: 1.1; }
+        .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+        .stat-item.green .stat-num { color: #27ae60; }
+        .stat-item.orange .stat-num { color: #e67e22; }
+        .progress-wrap { flex: 1; min-width: 160px; }
+        .progress-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+        .progress-bar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg,#27ae60,#2ecc71); border-radius: 7px; transition: width 0.5s; }
+        .unit-title { font-size: 1.05em; font-weight: 900; padding: 10px 16px; border-radius: 8px 8px 0 0; margin-top: 24px; display: flex; align-items: center; gap: 10px; }
+        .unit-title.blue  { background: #1a5276; color: white; }
+        .unit-title.teal  { background: #1e8449; color: white; }
+        .unit-title.purple{ background: #6c3483; color: white; }
+        .page-list { background: white; border: 2px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 4px; }
+        .page-item { display: flex; align-items: center; border-bottom: 1px solid #eee; transition: background 0.15s; }
+        .page-item:last-child { border-bottom: none; }
+        .page-item:hover { background: #f8f9fa; }
+        .page-item.s1 { background: #eafaf1; }
+        .page-item.s1:hover { background: #d5f5e3; }
+        .page-item.s3 { background: #d6eaf8; }
+        .page-item.s3:hover { background: #aed6f1; }
+        .page-item.sr { background: #fef9e7; border-left: 4px solid #f39c12; }
+        .page-num { font-weight: 900; font-size: 13px; padding: 14px 12px; min-width: 46px; text-align: center; align-self: stretch; display: flex; align-items: center; justify-content: center; border-right: 1px solid #eee; color: #1a5276; background: #f4f6f8; flex-shrink: 0; }
+        .page-info { flex: 1; padding: 10px 14px; }
+        .page-name { font-weight: bold; font-size: 14px; color: #1a5276; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .page-desc { font-size: 12px; color: #777; }
+        .bk { font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 10px; }
+        .bk-y { background: #f1c40f; color: #333; }
+        .bk-r { background: #e74c3c; color: white; }
+        .bk-b { background: #2980b9; color: white; }
+        .sb { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .sb-none { background: #eee; color: #aaa; }
+        .sb-done { background: #27ae60; color: white; }
+        .sb-many { background: #2980b9; color: white; }
+        .sb-date { font-size: 11px; color: #aaa; }
+        .rev-star { color: #f39c12; font-size: 13px; }
+        .page-actions { display: flex; align-items: center; padding: 0 10px; flex-shrink: 0; }
+        .lv { font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 10px; margin-left: 4px; }
+        .lv-ki  { background: #d5f5e3; color: #1e8449; }
+        .lv-hyo { background: #d6eaf8; color: #1a5276; }
+        .lv-ou  { background: #fdebd0; color: #d35400; }
+        .lv-hat { background: #f9ebea; color: #c0392b; }
+        .open-btn { text-decoration: none; background: #1a5276; color: white; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; transition: 0.2s; white-space: nowrap; }
+        .open-btn:hover { background: #154360; }
+        .open-btn.done { background: #27ae60; }
+        .open-btn.many { background: #2980b9; }
+        .reset-btn { background: none; border: 1px solid #ddd; color: #aaa; padding: 7px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-top: 20px; }
+        .reset-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; margin-bottom: 16px; padding: 10px 14px; background: white; border-radius: 8px; border: 1px solid #eee; }
+        .leg-item { display: flex; align-items: center; gap: 5px; }
+        .leg-box { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+        .footer { text-align: center; margin-top: 24px; font-size: 12px; color: #aaa; }
+        .line-float-btn { position: fixed; bottom: 24px; right: 24px; background: var(--line-green); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; font-weight: bold; font-size: 11px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 2000; transition: 0.2s; }
+        .line-float-btn:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+<a href="https://line.me/R/ti/p/@LINE_ID" target="_blank" class="line-float-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" width="28" height="28" style="margin-bottom:2px;">
+    質問する
+</a>
+
+<div class="top-header">
+    <h1>📐 数学Ⅰ　第1章　式の計算</h1>
+    <p>展開と因数分解 — 学習したいページを選んでください</p>
+</div>
+
+<div class="container">
+
+    <div id="statsBar">
+        <div class="stat-item"><div class="stat-num" id="totalN">6</div><div class="stat-label">総ページ数</div></div>
+        <div class="stat-item green"><div class="stat-num" id="studiedN">0</div><div class="stat-label">学習済み</div></div>
+        <div class="stat-item orange"><div class="stat-num" id="reviewN">0</div><div class="stat-label">復習リスト</div></div>
+        <div class="progress-wrap">
+            <div class="progress-label">学習進捗</div>
+            <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+            <div style="font-size:11px;color:#888;margin-top:3px;"><span id="progPct">0</span>% 完了</div>
+        </div>
+    </div>
+
+    <div id="reviewSection">
+        <h2>⭐ 復習リスト</h2>
+        <div id="reviewList"></div>
+    </div>
+
+    <div class="legend">
+        <span style="font-weight:bold;color:#555;">色の意味：</span>
+        <span class="leg-item"><span class="leg-box" style="background:#fff;border:1px solid #ddd;"></span>未学習</span>
+        <span class="leg-item"><span class="leg-box" style="background:#eafaf1;"></span>学習済み（1〜2回）</span>
+        <span class="leg-item"><span class="leg-box" style="background:#d6eaf8;"></span>しっかり学習（3回以上）</span>
+        <span class="leg-item"><span class="leg-box" style="background:#fef9e7;border-left:3px solid #f39c12;"></span>⭐ 復習リスト</span>
+        <span style="font-weight:bold;color:#555;margin-left:12px;">難易度：</span>
+        <span class="leg-item"><span class="lv lv-ki">📗 基礎</span></span>
+        <span class="leg-item"><span class="lv lv-hyo">📘 標準</span></span>
+        <span class="leg-item"><span class="lv lv-ou">📙 応用</span></span>
+        <span class="leg-item"><span class="lv lv-hat">📕 発展</span></span>
+    </div>
+
+    <!-- 展開 -->
+    <div class="unit-title blue">📖 展開　〜乗法公式〜</div>
+    <div class="page-list">
+        <div class="page-item" id="item-tenkai1">
+            <div class="page-num">①</div>
+            <div class="page-info">
+                <div class="page-name">(ax＋b)(cx＋d) の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-ki">📗 基礎</span></div>
+                <div class="page-desc">外×外・内×内の公式　例題ステップ解説＋類題4択＋テスト6問</div>
+                <div id="info-tenkai1" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai1.html" class="open-btn" id="btn-tenkai1">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai2">
+            <div class="page-num">②</div>
+            <div class="page-info">
+                <div class="page-name">(a＋b)³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
+                <div class="page-desc">3乗の展開公式・係数3・符号パターン　例題＋類題＋テスト</div>
+                <div id="info-tenkai2" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai2.html" class="open-btn" id="btn-tenkai2">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai3">
+            <div class="page-num">③</div>
+            <div class="page-info">
+                <div class="page-name">(a－b)³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
+                <div class="page-desc">マイナス符号の注意点・1・4項目がマイナス　例題＋類題＋テスト</div>
+                <div id="info-tenkai3" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai3.html" class="open-btn" id="btn-tenkai3">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai4">
+            <div class="page-num">④</div>
+            <div class="page-info">
+                <div class="page-name">a³±b³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
+                <div class="page-desc">和の3乗・差の3乗の公式　真ん中の符号が逆になる仕組み　例題＋類題＋テスト</div>
+                <div id="info-tenkai4" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai4.html" class="open-btn" id="btn-tenkai4">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai5">
+            <div class="page-num">⑤</div>
+            <div class="page-info">
+                <div class="page-name">(a＋b＋c)² の展開 <span class="bk bk-r">演習</span> <span class="lv lv-ou">📙 応用</span></div>
+                <div class="page-desc">面積モデルで理解する3変数展開　2倍の項に注意　例題＋類題＋テスト</div>
+                <div id="info-tenkai5" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai5.html" class="open-btn" id="btn-tenkai5">開く →</a></div>
+        </div>
+    </div>
+
+    <!-- 因数分解 -->
+    <div class="unit-title teal">🔢 因数分解　〜たすきがけ〜</div>
+    <div class="page-list">
+        <div class="page-item" id="item-insu1">
+            <div class="page-num">⑥</div>
+            <div class="page-info">
+                <div class="page-name">acx² 型の因数分解 <span class="bk bk-r">演習</span> <span class="lv lv-ou">📙 応用</span></div>
+                <div class="page-desc">たすきがけの手順・組み合わせの探し方　例題＋類題＋テスト</div>
+                <div id="info-insu1" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="insu1.html" class="open-btn" id="btn-insu1">開く →</a></div>
+        </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetAll()">🗑 学習記録をすべてリセット</button>
+    <div class="footer">数学Ⅰ　展開と因数分解　学習教材</div>
+</div>
+
+<script>
+var PAGES = [
+    {key:'tenkai1', name:'① (ax＋b)(cx＋d)の展開', file:'tenkai1.html'},
+    {key:'tenkai2', name:'② (a＋b)³の展開',        file:'tenkai2.html'},
+    {key:'tenkai3', name:'③ (a－b)³の展開',        file:'tenkai3.html'},
+    {key:'tenkai4', name:'④ a³±b³の展開',          file:'tenkai4.html'},
+    {key:'tenkai5', name:'⑤ (a＋b＋c)²の展開',     file:'tenkai5.html'},
+    {key:'insu1',   name:'⑥ acx²型の因数分解',     file:'insu1.html'},
+];
+
+function getData(key) {
+    try { return JSON.parse(localStorage.getItem('study_'+key)||'{"count":0,"review":false}'); }
+    catch(e) { return {count:0,review:false}; }
+}
+function setData(key,data) {
+    try { localStorage.setItem('study_'+key, JSON.stringify(data)); } catch(e) {}
+}
+function removeReview(key) {
+    var d=getData(key); d.review=false; setData(key,d); render();
+}
+function render() {
+    var studied=0, revItems=[];
+    PAGES.forEach(function(p) {
+        var d=getData(p.key);
+        var item=document.getElementById('item-'+p.key);
+        var info=document.getElementById('info-'+p.key);
+        var btn=document.getElementById('btn-'+p.key);
+        if (!item) return;
+        item.className='page-item';
+        if (d.review) item.classList.add('sr');
+        else if (d.count>=3) item.classList.add('s3');
+        else if (d.count>=1) item.classList.add('s1');
+        var ih='';
+        if (d.count===0) {
+            ih='<span class="sb sb-none">未学習</span>';
+        } else {
+            if (d.count<3) { ih='<span class="sb sb-done">✓ 学習済み '+d.count+'回</span>'; }
+            else { ih='<span class="sb sb-many">★ '+d.count+'回学習</span>'; }
+            if (d.lastDate) ih+=' <span class="sb-date">最終：'+d.lastDate+'</span>';
+            studied++;
+        }
+        if (d.review) ih+=' <span class="rev-star">⭐ 復習リスト</span>';
+        if (info) info.innerHTML=ih;
+        if (btn) {
+            btn.className='open-btn';
+            if (d.count>=3) btn.classList.add('many');
+            else if (d.count>=1) btn.classList.add('done');
+        }
+        if (d.review) revItems.push(p);
+    });
+    document.getElementById('studiedN').innerText=studied;
+    document.getElementById('reviewN').innerText=revItems.length;
+    var pct=Math.round(studied/PAGES.length*100);
+    document.getElementById('progFill').style.width=pct+'%';
+    document.getElementById('progPct').innerText=pct;
+    var revSec=document.getElementById('reviewSection');
+    var revList=document.getElementById('reviewList');
+    if (revItems.length>0) {
+        revSec.style.display='block';
+        var h='';
+        revItems.forEach(function(p) {
+            h+='<div class="review-card"><a href="'+p.file+'">⭐ '+p.name+'</a>'
+              +'<button class="review-remove" onclick="removeReview(\''+p.key+'\')" title="外す">✕</button></div>';
+        });
+        revList.innerHTML=h;
+    } else { revSec.style.display='none'; }
+}
+function resetAll() {
+    if (!confirm('学習記録をすべてリセットしますか？')) return;
+    PAGES.forEach(function(p) { try { localStorage.removeItem('study_'+p.key); } catch(e) {} });
+    render();
+}
+render();
+</script>
+</body>
+</html>

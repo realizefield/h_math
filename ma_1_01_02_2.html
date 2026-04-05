@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>2-3 類題</title>
+    <style>
+        :root { --bg-color: #f8fbff; --main-blue: #2c5d91; --ans-color: #d32f2f; --ans-bg: #fff9c4; --success-green: #2e7d32; --container-width: 1000px; }
+        body { background-color: var(--bg-color); font-family: "Hiragino Sans", "Meiryo", sans-serif; margin: 0; padding: 0; line-height: 2.2; padding-bottom: 250px; }
+        .wrapper { max-width: var(--container-width); margin: 0 auto; }
+        .timer-header { background: #333; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .timer-main { font-size: 26px; color: #ffeb3b; font-family: monospace; font-weight: bold; }
+        .nav-tabs { background: white; padding: 15px 20px; border-bottom: 2px solid #ddd; display: flex; gap: 10px; }
+        .tab { padding: 12px 10px; border: 1px solid #ccc; border-radius: 5px; background: #f5f5f5; cursor: pointer; color: #333; font-size: 14px; font-weight: bold; flex: 1; text-align: center; text-decoration: none; display: block; }
+        .tab.active { background: var(--main-blue); color: white; border-color: var(--main-blue); }
+        .container { padding: 30px 0; }
+        .content-card { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; }
+        .math-block { background: #fdfdfd; border: 1px solid #eee; padding: 25px; border-radius: 8px; margin: 15px 0; font-size: 1.2em; position: relative; }
+        .blank { display: inline-block; min-width: 80px; border-bottom: 2px solid #999; text-align: center; margin: 0 4px; padding: 0 5px; min-height: 1.5em; vertical-align: bottom; cursor: pointer; }
+        .blank.challenge { background-color: #fffde7; }
+        .blank.filled { color: var(--main-blue); }
+        .blank.correct { color: var(--success-green); border-bottom: 3px solid var(--success-green); }
+        .hint-btn { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 4px; padding: 2px 10px; cursor: pointer; font-size: 14px; color: #1565c0; position: absolute; right: 20px; top: 20px; }
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 3px solid #fbc02d; padding: 25px; border-radius: 12px; z-index: 3000; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; min-width: 450px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; display: none; }
+        #word-bank-container { position: fixed; bottom: 0; left: 0; width: 100%; background: #eee; border-top: 4px solid var(--main-blue); padding: 20px 0; z-index: 2000; display: none; }
+        #word-bank { max-width: var(--container-width); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .word-item { background: white; border: 2px solid var(--main-blue); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 18px; }
+        .word-item.selected { background: #bbdefb !important; }
+        .word-item.used { visibility: hidden; pointer-events: none; }
+        .btn-action { padding: 15px 40px; color: white; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                processHtmlClass: 'mathjax-process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="mathjax-process">
+<div class="wrapper">
+    <div class="timer-header"><div class="timer-main">TIME: <span id="timer">00:00.0</span></div></div>
+    <div class="nav-tabs">
+        <a href="ma_1_01_02_1.html" class="tab">2-1 対称式導入</a>
+        <a href="ma_1_01_02_2.html" class="tab">2-2 例題</a>
+        <a href="ma_1_01_02_3.html" class="tab active">2-3 類題</a>
+        <a href="ma_1_01_02_4.html" class="tab">2-4 テスト</a>
+    </div>
+    <div class="container">
+        <div class="content-card">
+            <h2>類題（練習 11）</h2>
+            <div class="math-block">
+                (1) $x+y=2, xy=-1$ のとき<br>
+                1) $x^2+y^2 = $ [ <span class="blank" data-ans="6"></span> ] 2) $x^3+y^3 = $ [ <span class="blank" data-ans="14"></span> ]
+                <button class="hint-btn" onclick="showHint('H1')">ヒント</button>
+            </div>
+            <div class="math-block">
+                (2) $x+y=-2, xy=-35$ のとき<br>
+                1) $x^2+y^2 = $ [ <span class="blank" data-ans="74"></span> ] 2) $x^3+y^3 = $ [ <span class="blank" data-ans="-218"></span> ]
+                <button class="hint-btn" onclick="showHint('H1')">ヒント</button>
+            </div>
+            <div class="math-block">
+                (3) $x+y=1, xy=-20$ のとき<br>
+                1) $x^2+y^2 = $ [ <span class="blank" data-ans="41"></span> ] 2) $x^3+y^3 = $ [ <span class="blank" data-ans="61"></span> ]
+                <button class="hint-btn" onclick="showHint('H1')">ヒント</button>
+            </div>
+            <div style="text-align:center; margin-top:40px;">
+                <button class="btn-action" style="background: #ff9800;" onclick="startChallenge()">類題チャレンジ開始</button>
+                <button class="btn-action" style="background: #4caf50; margin-left:20px;" onclick="checkAnswers()">判定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="overlay" class="overlay" onclick="closePopups()"></div>
+<div id="H1" class="popup">
+    <div style="font-weight:bold; margin-bottom:15px;">この式を使います。</div>
+    <div style="font-size:1.3em; padding:15px; border:1px solid #ddd; background:#f9f9f9;">
+        $$x^2 + y^2 = (x + y)^2 - 2xy$$
+        $$x^3 + y^3 = (x + y)^3 - 3xy(x + y)$$
+    </div>
+    <button style="display:block; margin: 20px auto 0;" onclick="closePopups()">閉じる</button>
+</div>
+<div id="AnsPopup" class="popup" style="width: 500px; text-align: left;">
+    <div style="text-align:center; font-weight:bold; font-size:1.2em; margin-bottom:15px;">【解説】</div>
+    <p><b>(1)</b> $2^2-2(-1)=6$ / $2^3-3(-1)(2)=14$</p>
+    <p><b>(2)</b> $(-2)^2-2(-35)=74$ / $(-2)^3-3(-35)(-2)=-218$</p>
+    <p><b>(3)</b> $1^2-2(-20)=41$ / $1^3-3(-20)(1)=61$</p>
+    <button style="display:block; margin: 15px auto 0;" onclick="closePopups()">閉じる</button>
+</div>
+<div id="word-bank-container"><div id="word-bank"></div></div>
+<script>
+    let startTime, timerInterval, selectedWord = null;
+    const allWords = ["6", "14", "74", "-218", "41", "61", "10", "22", "50", "-150"];
+    function showHint(id){ document.getElementById('overlay').style.display='block'; document.getElementById(id).style.display='block'; }
+    function closePopups(){ document.getElementById('overlay').style.display='none'; document.querySelectorAll('.popup').forEach(p=>p.style.display='none'); }
+    function startChallenge() {
+        const blanks = document.querySelectorAll('.blank'); const bank = document.getElementById('word-bank');
+        document.getElementById('word-bank-container').style.display = 'block'; bank.innerHTML = '';
+        blanks.forEach(b => {
+            b.innerText = ''; b.classList.add('challenge'); b.onclick = function() {
+                if(this.innerText!==''){ document.getElementById(this.getAttribute('data-used-id')).classList.remove('used'); this.innerText=''; }
+                if(selectedWord){ this.innerText=selectedWord.innerText; this.setAttribute('data-used-id',selectedWord.id); selectedWord.classList.add('used'); selectedWord=null; }
+            };
+        });
+        [...allWords].sort(()=>Math.random()-0.5).forEach((w,i)=>{ const d=document.createElement('div'); d.className='word-item'; d.id='word-'+i; d.innerText=w; d.onclick=function(e){ e.stopPropagation(); document.querySelectorAll('.word-item').forEach(it=>it.classList.remove('selected')); this.classList.add('selected'); selectedWord=this; }; bank.appendChild(d); });
+        startTime=Date.now(); timerInterval=setInterval(()=>{ document.getElementById('timer').innerText=((Date.now()-startTime)/1000).toFixed(1).padStart(6,'0'); },100);
+    }
+    function checkAnswers() { document.querySelectorAll('.blank').forEach(b=>{ if(b.innerText===b.getAttribute('data-ans')) b.classList.add('correct'); }); document.getElementById('overlay').style.display='block'; document.getElementById('AnsPopup').style.display='block'; clearInterval(timerInterval); }
+</script>
+</body>
+</html>

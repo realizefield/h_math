@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>数学Ⅰ：① (ax＋b)(cx＋d)の展開</title>
+    <style>
+        :root { --bg-color:#f8f9fa; --drop-zone-bg:#fff9c4; --primary:#1a5276; }
+        body { font-family:sans-serif; background:var(--bg-color); margin:0; padding:0 16px; overflow-x:hidden; box-sizing:border-box; }
+        .sticky-header { position:sticky; top:0; background:var(--bg-color); padding:10px 16px; z-index:1000; border-bottom:2px solid #ddd; box-sizing:border-box; }
+        .page-nav { max-width:900px; margin:0 auto 10px; display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; }
+        .nav-btn { text-decoration:none; background:#7f8c8d; color:white; padding:6px 14px; border-radius:20px; font-size:0.85em; font-weight:bold; transition:0.2s; white-space:nowrap; }
+        .nav-btn:hover { background:#34495e; }
+        .nav-btn.index-btn { background:#1a5276; padding:6px 18px; }
+        .nav-btn.disabled { background:#ccc; pointer-events:none; color:#999; }
+        .lv-banner { max-width:900px; margin:0 auto 10px; background:#d5f5e3; border-left:6px solid #1e8449; border-radius:0 8px 8px 0; padding:10px 16px; font-size:13px; color:#1e8449; font-weight:bold; display:flex; align-items:center; gap:10px; }
+        .challenge-panel { background:#eaf0fb; border:1.5px solid #aed6f1; color:#1a5276; padding:10px 20px; border-radius:8px; display:flex; justify-content:space-around; align-items:center; max-width:900px; margin:0 auto 10px; }
+        .timer { font-size:1.5em; color:#1a5276; font-family:monospace; font-weight:bold; }
+        .word-bank-container { background:#eee; padding:12px 16px; border-radius:8px; border:1px solid #ccc; max-width:900px; margin:0 auto; }
+        .word-bank { display:flex; flex-wrap:wrap; gap:8px; min-height:40px; }
+        .drag-item { background:#fff; color:#c0392b; border:1px solid #333; padding:5px 14px; cursor:pointer; font-weight:bold; font-size:1em; border-radius:3px; user-select:none; }
+        .drag-item.selected { background:#f1c40f; color:#333; box-shadow:0 0 0 3px #e67e22; transform:scale(1.08); }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+        .word-bank-container.shake { animation:shake 0.4s ease; }
+        .container { max-width:900px; margin:20px auto; background:white; padding:24px; border-radius:12px; }
+        .frac { display:inline-flex; flex-direction:column; align-items:center; font-size:0.9em; line-height:1.1; vertical-align:middle; }
+        .frac .num { border-bottom:1.5px solid currentColor; padding:0 3px; font-weight:bold; }
+        .frac .den { padding:0 3px; font-weight:bold; }
+        .sec-title { font-weight:900; font-size:1.1em; color:#2980b9; border-left:6px solid #2980b9; padding-left:10px; margin-bottom:14px; margin-top:24px; }
+        .formula-box { background:#eaf0fb; border:2px solid #aed6f1; border-radius:10px; padding:16px 20px; margin-bottom:18px; text-align:center; }
+        .formula-main { font-size:1.4em; font-weight:900; color:#1a5276; line-height:2; }
+        .formula-sub { font-size:13px; color:#555; margin-top:8px; line-height:1.9; }
+        .fig-box { background:#fafcff; border:1.5px solid #aed6f1; border-radius:10px; padding:16px; margin-bottom:18px; text-align:center; overflow-x:auto; }
+        .fig-box svg { max-width:100%; }
+        .point-box { border-radius:9px; padding:12px 16px; margin-bottom:14px; border-left:4px solid; font-size:14px; line-height:2; }
+        .point-box.green { background:#eafaf1; border-color:#27ae60; }
+        .point-box.green h4 { color:#27ae60; font-size:12px; font-weight:900; margin:0 0 5px; }
+        .point-box.yellow { background:#fef9e7; border-color:#f39c12; }
+        .point-box.yellow h4 { color:#e67e22; font-size:12px; font-weight:900; margin:0 0 5px; }
+        .point-box.red { background:#fdedec; border-color:#e74c3c; }
+        .point-box.red h4 { color:#e74c3c; font-size:12px; font-weight:900; margin:0 0 5px; }
+        .exp-box { background:#f4f6f8; border-radius:9px; padding:12px 16px; margin-bottom:10px; border-left:4px solid #27ae60; font-size:14px; line-height:2; display:none; }
+        .exp-box.blue { border-left-color:#2980b9; }
+        .exp-box.orange { border-left-color:#e67e22; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        .exp-box.show { display:block; animation:fadeIn .25s ease; }
+        .exp-box h4 { font-size:12px; color:#27ae60; font-weight:900; margin-bottom:5px; }
+        .exp-box.blue h4 { color:#2980b9; }
+        .exp-box.orange h4 { color:#e67e22; }
+        .reveal-btn { background:#2980b9; color:white; border:none; border-radius:8px; padding:10px 22px; font-size:14px; font-weight:bold; cursor:pointer; margin-top:8px; transition:background .15s; font-family:sans-serif; }
+        .reveal-btn:hover { background:#1a5276; }
+        .reidai-box { background:#fafcff; border:2px solid #aed6f1; border-radius:10px; padding:20px 24px; margin-bottom:24px; }
+        .ruidai-box { background:#fffdf5; border:2px solid #f9e4b0; border-radius:10px; padding:20px 24px; margin-bottom:20px; }
+        .ruidai-title { font-weight:900; font-size:1em; color:#e67e22; margin-bottom:14px; border-left:6px solid #e67e22; padding-left:10px; }
+        .test-box { background:#fdf2f8; border:2px solid #d7bde2; border-radius:10px; padding:20px 24px; margin-bottom:20px; }
+        .test-title { font-weight:900; font-size:1em; color:#8e44ad; margin-bottom:14px; border-left:6px solid #8e44ad; padding-left:10px; }
+        .q-text { font-size:14.5px; line-height:1.9; margin-bottom:14px; background:#f0f6ff; border-radius:6px; padding:10px 14px; }
+        .step-area { font-size:14.5px; line-height:2.4; }
+        .step-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+        .step-label { color:#888; min-width:60px; font-size:13px; flex-shrink:0; }
+        .step-hint { color:#e67e22; font-size:12px; }
+        .phase-bar { background:#eaf0fb; border-left:4px solid #2980b9; padding:4px 10px; border-radius:0 4px 4px 0; font-size:12px; font-weight:bold; color:#2980b9; margin:8px 0 6px; }
+        .phase-bar.green { background:#eafaf1; border-left-color:#27ae60; color:#27ae60; }
+        .phase-bar.orange { background:#fef5ec; border-left-color:#e67e22; color:#e67e22; }
+        .math { font-style:italic; color:#1a5276; font-weight:bold; }
+        .math-r { font-style:italic; color:#c0392b; font-weight:bold; }
+        .math-g { font-style:italic; color:#27ae60; font-weight:bold; }
+        .drop-zone-inline { display:inline-flex; align-items:center; justify-content:center; min-width:60px; min-height:2em; background:var(--drop-zone-bg); border:1.5px solid #aaa; vertical-align:middle; cursor:pointer; text-align:center; font-weight:bold; color:#c0392b; padding:2px 8px; border-radius:3px; font-size:14px; transition:background .15s; }
+        .drop-zone-inline:hover { border-color:#e67e22; background:#fff3cd; }
+        .drop-zone-inline.correct { background:#d4edda !important; border:2px solid #28a745 !important; color:#155724 !important; }
+        .drop-zone-inline.wrong { background:#f8d7da !important; border:2px solid #dc3545 !important; }
+        .drop-zone-inline.wide { min-width:90px; }
+        .drop-zone-inline.xw { min-width:130px; }
+        .ans-row { display:flex; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap; }
+        .ans-frame { border:2px solid #aaa; border-radius:4px; padding:4px 14px; font-weight:bold; color:#1a5276; font-size:15px; }
+        .score-panel { background:#eafaf1; border:2px solid #27ae60; border-radius:10px; padding:14px 20px; text-align:center; margin-top:16px; display:none; }
+        .score-panel.fail { background:#fdedec; border-color:#e74c3c; }
+        .score-big { font-size:2em; font-weight:900; color:#27ae60; }
+        .score-panel.fail .score-big { color:#e74c3c; }
+        .controls { text-align:center; margin-top:30px; padding-bottom:100px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+        .main-btn { padding:13px 28px; font-size:1rem; cursor:pointer; border:none; border-radius:8px; font-weight:bold; color:white; }
+        .btn-start { background:#27ae60; }
+        .btn-start:hover { background:#1e8449; }
+        .btn-check { background:#e67e22; }
+        .btn-check:hover { background:#ca6f1e; }
+        .btn-show { background:#7f8c8d; }
+        .btn-show:hover { background:#5d6d7e; }
+        #confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+    </style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="sticky-header">
+    <nav class="page-nav">
+        <a href="index.html" class="nav-btn disabled">◀ 前へ</a>
+        <a href="index.html" class="nav-btn index-btn">📋 目次</a>
+        <a href="tenkai2.html" class="nav-btn">② (a＋b)³ ▶</a>
+    </nav>
+    <div class="lv-banner">📗 基礎レベル — 外×外・内×内のパターンをつかもう！</div>
+    <div class="challenge-panel">
+        <div>TIME: <span id="timerDisplay" class="timer">00:00.0</span></div>
+        <div id="recordDisplay" style="font-size:0.8em;">記録なし</div>
+        <div id="scoreDisplay" style="font-size:0.8em;"></div>
+    </div>
+    <div class="word-bank-container">
+        <div id="wordBank" class="word-bank">「チャレンジ開始」をクリックしてください。</div>
+    </div>
+</div>
+
+<div class="container">
+
+<!-- ══ 公式 ══ -->
+<div class="sec-title">📌 公式と仕組み</div>
+<div class="formula-box">
+    <div class="formula-main">
+        (<span style="color:#1a5276">ax</span>＋<span style="color:#27ae60">b</span>)(<span style="color:#1a5276">cx</span>＋<span style="color:#27ae60">d</span>) ＝ <span style="color:#1a5276">ac</span>x²＋(<span style="color:#c0392b">ad＋bc</span>)x＋<span style="color:#27ae60">bd</span>
+    </div>
+    <div class="formula-sub">
+        <span style="color:#1a5276">■ x²の係数</span>：先頭どうし　ax × cx = acx²<br>
+        <span style="color:#c0392b">■ xの係数（真ん中）</span>：外×内 + 内×外 = ad＋bc<br>
+        <span style="color:#27ae60">■ 定数項</span>：末尾どうし　b × d = bd
+    </div>
+</div>
+
+<!-- 図解 -->
+<div class="fig-box">
+    <svg viewBox="0 0 480 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;">
+        <defs>
+            <marker id="arB" markerWidth="7" markerHeight="7" refX="4" refY="3" orient="auto"><path d="M0,0L0,6L6,3z" fill="#1a5276"/></marker>
+            <marker id="arG" markerWidth="7" markerHeight="7" refX="4" refY="3" orient="auto"><path d="M0,0L0,6L6,3z" fill="#27ae60"/></marker>
+            <marker id="arR" markerWidth="7" markerHeight="7" refX="4" refY="3" orient="auto"><path d="M0,0L0,6L6,3z" fill="#c0392b"/></marker>
+        </defs>
+        <!-- 式 -->
+        <text x="20" y="58" font-size="22" fill="#222">(</text>
+        <text x="34" y="58" font-size="22" fill="#1a5276" font-weight="bold">ax</text>
+        <text x="68" y="58" font-size="22" fill="#222">＋</text>
+        <text x="90" y="58" font-size="22" fill="#27ae60" font-weight="bold">b</text>
+        <text x="104" y="58" font-size="22" fill="#222">)(</text>
+        <text x="130" y="58" font-size="22" fill="#1a5276" font-weight="bold">cx</text>
+        <text x="165" y="58" font-size="22" fill="#222">＋</text>
+        <text x="187" y="58" font-size="22" fill="#27ae60" font-weight="bold">d</text>
+        <text x="201" y="58" font-size="22" fill="#222">)</text>
+        <!-- 外×外 -->
+        <path d="M46,33 Q108,8 148,33" stroke="#1a5276" stroke-width="2.5" fill="none" marker-end="url(#arB)"/>
+        <rect x="62" y="4" width="72" height="22" rx="5" fill="#eaf0fb"/>
+        <text x="98" y="19" font-size="12" fill="#1a5276" font-weight="bold" text-anchor="middle">外×外</text>
+        <!-- 内×内 -->
+        <path d="M96" y="33 Q150,8 192,33" stroke="#27ae60" stroke-width="2.5" fill="none" marker-end="url(#arG)"/>
+        <rect x="122" y="4" width="72" height="22" rx="5" fill="#eafaf1"/>
+        <text x="158" y="19" font-size="12" fill="#27ae60" font-weight="bold" text-anchor="middle">内×内</text>
+        <!-- 外×内 / 内×外 -->
+        <path d="M52,70 Q124,106 192,70" stroke="#c0392b" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#arR)"/>
+        <path d="M96,70 Q128,98 148,70" stroke="#c0392b" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#arR)"/>
+        <text x="124" y="118" font-size="12" fill="#c0392b" font-weight="bold" text-anchor="middle">外×内 ＋ 内×外</text>
+        <!-- 結果ボックス -->
+        <rect x="20" y="130" width="440" height="52" rx="10" fill="#eaf0fb" stroke="#aed6f1" stroke-width="1.5"/>
+        <text x="36" y="160" font-size="16" fill="#222">＝</text>
+        <text x="56" y="160" font-size="16" fill="#1a5276" font-weight="bold">acx²</text>
+        <text x="104" y="160" font-size="16" fill="#222">＋(</text>
+        <text x="128" y="160" font-size="16" fill="#c0392b" font-weight="bold">ad＋bc</text>
+        <text x="210" y="160" font-size="16" fill="#222">)x ＋</text>
+        <text x="258" y="160" font-size="16" fill="#27ae60" font-weight="bold">bd</text>
+        <!-- 注釈 -->
+        <text x="76" y="198" font-size="11" fill="#1a5276" text-anchor="middle">x²の係数</text>
+        <line x1="76" y1="188" x2="76" y2="182" stroke="#1a5276" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="170" y="198" font-size="11" fill="#c0392b" text-anchor="middle">xの係数</text>
+        <line x1="170" y1="188" x2="170" y2="182" stroke="#c0392b" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="264" y="198" font-size="11" fill="#27ae60" text-anchor="middle">定数項</text>
+        <line x1="264" y1="188" x2="264" y2="182" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- ポイント枠 -->
+        <rect x="20" y="208" width="440" height="20" rx="5" fill="#fef9e7" stroke="#f39c12" stroke-width="1"/>
+        <text x="240" y="222" font-size="12" fill="#c0392b" font-weight="bold" text-anchor="middle">ポイント：両端はそのまま、真ん中だけ「外×内＋内×外」！</text>
+    </svg>
+</div>
+
+<div class="point-box yellow">
+    <h4>💡 具体例で確認</h4>
+    (3x＋5)(2x－7) を展開すると…<br>
+    &nbsp;&nbsp;x²の係数：<span class="math">3×2 ＝ 6</span><br>
+    &nbsp;&nbsp;xの係数：<span class="math-r">3×(－7)＋5×2 ＝ －21＋10 ＝ －11</span><br>
+    &nbsp;&nbsp;定数項：<span class="math-g">5×(－7) ＝ －35</span><br>
+    &nbsp;&nbsp;→ <strong>6x²－11x－35</strong>
+</div>
+
+<!-- ══ 例題 ══ -->
+<div class="sec-title">📝 例題</div>
+<div class="reidai-box">
+    <div class="phase-bar">例題</div>
+    <div class="q-text">
+        (4x＋y)(3x－2y) を展開しなさい。
+    </div>
+    <button class="reveal-btn" id="rb-e1" onclick="revealStep('e1',4)">▶ STEP 1 を見る</button>
+    <div class="exp-box green" id="e1-s0" style="display:none;">
+        <h4>STEP 1 — x²の係数（外×外）</h4>
+        先頭どうしを掛ける：<span class="math">4×3 ＝ 12</span>　→　<span class="math">12x²</span>
+    </div>
+    <div class="exp-box blue" id="e1-s1" style="display:none;">
+        <h4>STEP 2 — xの係数（外×内＋内×外）</h4>
+        外×内：<span class="math">4x×(－2y) ＝ －8xy</span><br>
+        内×外：<span class="math">y×3x ＝ ＋3xy</span><br>
+        合計：<span class="math-r">－8xy＋3xy ＝ <strong>－5xy</strong></span>
+    </div>
+    <div class="exp-box orange" id="e1-s2" style="display:none;">
+        <h4>STEP 3 — 定数項（内×内）</h4>
+        末尾どうしを掛ける：<span class="math">y×(－2y) ＝ <strong style="color:#27ae60">－2y²</strong></span>
+    </div>
+    <div class="exp-box green" id="e1-s3" style="display:none;">
+        <h4>STEP 4 — まとめて答え</h4>
+        <span style="font-size:1.15em;font-weight:900;color:#1a5276">＝ 12x² <span style="color:#c0392b">－5xy</span> <span style="color:#27ae60">－2y²</span></span>
+    </div>
+</div>
+
+<!-- ══ 類題（4択） ══ -->
+<div class="sec-title">✏️ 類題（4択クイズ）</div>
+<div id="quiz-area"></div>
+
+<!-- ══ テスト（6択・空欄補充） ══ -->
+<div class="sec-title">🏆 テスト（チャレンジ）</div>
+<div class="test-box">
+    <div class="test-title">テスト — 6問に挑戦！（5問以上で合格）</div>
+
+    <!-- 問1 -->
+    <div class="phase-bar">問1</div>
+    <div class="q-text">(2x＋1)(5x－6) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²の係数</span>
+            2×5 ＝ <span class="drop-zone-inline" data-ans="10" onclick="zCl(this)"></span>
+            &nbsp;→&nbsp; <span class="drop-zone-inline wide" data-ans="10x²" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            外×内：2x×(－6)＝<span class="drop-zone-inline" data-ans="－12x" onclick="zCl(this)"></span>，
+            内×外：1×5x＝<span class="drop-zone-inline" data-ans="＋5x" onclick="zCl(this)"></span>
+            &nbsp;合計：<span class="drop-zone-inline" data-ans="－7x" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            1×(－6) ＝ <span class="drop-zone-inline" data-ans="－6" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="10x²－7x－6" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <!-- 問2 -->
+    <div class="phase-bar" style="margin-top:18px;">問2</div>
+    <div class="q-text">(4x＋3)(3x－7) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²の係数</span>
+            4×3 ＝ <span class="drop-zone-inline" data-ans="12" onclick="zCl(this)"></span>
+            &nbsp;→&nbsp; <span class="drop-zone-inline wide" data-ans="12x²" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            外×内：4x×(－7)＝<span class="drop-zone-inline" data-ans="－28x" onclick="zCl(this)"></span>，
+            内×外：3×3x＝<span class="drop-zone-inline" data-ans="＋9x" onclick="zCl(this)"></span>
+            &nbsp;合計：<span class="drop-zone-inline" data-ans="－19x" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            3×(－7) ＝ <span class="drop-zone-inline" data-ans="－21" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="12x²－19x－21" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <!-- 問3 -->
+    <div class="phase-bar" style="margin-top:18px;">問3</div>
+    <div class="q-text">(7x＋2y)(x－3y) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²係数</span>
+            7×1 ＝ <span class="drop-zone-inline" data-ans="7" onclick="zCl(this)"></span>
+            &nbsp;→&nbsp; <span class="drop-zone-inline wide" data-ans="7x²" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            7x×(－3y)＋2y×x ＝ <span class="drop-zone-inline" data-ans="－21xy" onclick="zCl(this)"></span>＋<span class="drop-zone-inline" data-ans="2xy" onclick="zCl(this)"></span> ＝ <span class="drop-zone-inline" data-ans="－19xy" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            2y×(－3y) ＝ <span class="drop-zone-inline" data-ans="－6y²" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="7x²－19xy－6y²" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <!-- 問4 -->
+    <div class="phase-bar" style="margin-top:18px;">問4</div>
+    <div class="q-text">(3x－2y)(2x－y) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²係数</span>
+            3×2 ＝ <span class="drop-zone-inline" data-ans="6" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            3x×(－y)＋(－2y)×2x ＝ <span class="drop-zone-inline" data-ans="－3xy" onclick="zCl(this)"></span>＋<span class="drop-zone-inline" data-ans="－4xy" onclick="zCl(this)"></span> ＝ <span class="drop-zone-inline" data-ans="－7xy" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            (－2y)×(－y) ＝ <span class="drop-zone-inline" data-ans="2y²" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="6x²－7xy＋2y²" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <!-- 問5 -->
+    <div class="phase-bar" style="margin-top:18px;">問5</div>
+    <div class="q-text">(5x－1)(x－7) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²係数</span>
+            5×1 ＝ <span class="drop-zone-inline" data-ans="5" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            5x×(－7)＋(－1)×x ＝ <span class="drop-zone-inline" data-ans="－35x" onclick="zCl(this)"></span>＋<span class="drop-zone-inline" data-ans="－x" onclick="zCl(this)"></span> ＝ <span class="drop-zone-inline" data-ans="－36x" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            (－1)×(－7) ＝ <span class="drop-zone-inline" data-ans="7" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="5x²－36x＋7" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <!-- 問6 -->
+    <div class="phase-bar" style="margin-top:18px;">問6</div>
+    <div class="q-text">(5x－3y)(x＋2y) を展開しなさい。</div>
+    <div class="step-area">
+        <div class="step-row">
+            <span class="step-label">x²係数</span>
+            5×1 ＝ <span class="drop-zone-inline" data-ans="5" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">真ん中</span>
+            5x×2y＋(－3y)×x ＝ <span class="drop-zone-inline" data-ans="10xy" onclick="zCl(this)"></span>＋<span class="drop-zone-inline" data-ans="－3xy" onclick="zCl(this)"></span> ＝ <span class="drop-zone-inline" data-ans="7xy" onclick="zCl(this)"></span>
+        </div>
+        <div class="step-row">
+            <span class="step-label">定数項</span>
+            (－3y)×2y ＝ <span class="drop-zone-inline" data-ans="－6y²" onclick="zCl(this)"></span>
+        </div>
+        <div class="ans-row">
+            <span style="font-weight:900;color:#1a5276;">答え：</span>
+            <span class="drop-zone-inline xw" data-ans="5x²＋7xy－6y²" onclick="zCl(this)"></span>
+        </div>
+    </div>
+
+    <div id="score-panel" class="score-panel">
+        <div class="score-big" id="score-text"></div>
+        <div id="score-msg" style="margin-top:6px;font-size:14px;"></div>
+    </div>
+</div>
+
+<div class="controls">
+    <button class="main-btn btn-start" onclick="stCh()">▶ チャレンジ開始</button>
+    <button class="main-btn btn-check" onclick="chAn()">✔ 答え合わせ</button>
+    <button class="main-btn btn-show"  onclick="shMo()">👁 お手本を見る</button>
+</div>
+
+</div><!-- /container -->
+
+<!-- 復習ボタン -->
+<div style="position:fixed;bottom:110px;left:16px;z-index:3000;">
+    <button id="reviewBtn" onclick="toggleReview()" style="background:#f39c12;color:white;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:bold;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;">
+        <span id="reviewIcon">☆</span><span id="reviewText">復習リストに追加</span>
+    </button>
+</div>
+
+<script>
+/* ── 類題（4択） ── */
+var quizData = [
+    {q:'(3x＋1)(5x－3) を展開すると？',
+     choices:['15x²＋4x＋3','15x²－4x－3','15x²＋4x－3','15x²－4x＋3'],
+     ans:1,
+     sol:'x²：3×5=15，真ん中：外×内 3x×(－3)=－9x，内×外 1×5x=＋5x → 合計－4x，定数：1×(－3)=－3'},
+    {q:'(3x－4)(2x＋5) を展開すると？',
+     choices:['6x²＋7x－20','6x²－7x＋20','6x²＋7x＋20','6x²－7x－20'],
+     ans:0,
+     sol:'x²：3×2=6，真ん中：3x×5=15x，(－4)×2x=－8x → 合計7x，定数：(－4)×5=－20'},
+    {q:'(3x－y)(x＋2y) を展開すると？',
+     choices:['3x²＋5xy－2y²','3x²－5xy＋2y²','3x²＋5xy＋2y²','3x²－5xy－2y²'],
+     ans:0,
+     sol:'x²：3×1=3，真ん中：3x×2y=6xy，(－y)×x=－xy → 合計5xy，定数：(－y)×2y=－2y²'},
+    {q:'(5x＋y)(x－7y) を展開すると？',
+     choices:['5x²＋34xy－7y²','5x²－34xy－7y²','5x²－34xy＋7y²','5x²＋34xy＋7y²'],
+     ans:1,
+     sol:'x²：5×1=5，真ん中：5x×(－7y)=－35xy，y×x=xy → 合計－34xy，定数：y×(－7y)=－7y²'},
+];
+var qi=0, qscore=0;
+
+function buildQuiz() {
+    var area=document.getElementById('quiz-area');
+    area.innerHTML='';
+    if (qi>=quizData.length) {
+        area.innerHTML='<div class="score-panel" style="display:block;"><div class="score-big">'+qscore+' / '+quizData.length+'</div><div>類題終了！</div><button onclick="qi=0;qscore=0;buildQuiz();" style="margin-top:10px;background:#1a5276;color:white;border:none;padding:8px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">もう一度</button></div>';
+        return;
+    }
+    var d=quizData[qi];
+    var h='<div class="ruidai-box">';
+    h+='<div class="ruidai-title">類題 '+(qi+1)+' / '+quizData.length+'</div>';
+    h+='<div class="q-text">'+d.q+'</div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">';
+    var labs=['①','②','③','④'];
+    d.choices.forEach(function(c,i){
+        h+='<button onclick="ansQuiz('+i+')" id="qc'+i+'" style="padding:10px 8px;border:2px solid #ddd;border-radius:8px;background:white;font-size:14px;cursor:pointer;font-family:sans-serif;font-weight:bold;transition:0.15s;">'
+          +labs[i]+'　'+c+'</button>';
+    });
+    h+='</div>';
+    h+='<div id="qfb" style="display:none;border-radius:8px;padding:10px 14px;font-size:13px;"></div>';
+    h+='</div>';
+    area.innerHTML=h;
+}
+function ansQuiz(i) {
+    var d=quizData[qi];
+    var fb=document.getElementById('qfb');
+    for (var j=0;j<4;j++) {
+        var b=document.getElementById('qc'+j);
+        if (!b) continue;
+        b.disabled=true;
+        if (j===d.ans) b.style.background='#d4edda';
+        else if (j===i && i!==d.ans) b.style.background='#f8d7da';
+    }
+    if (i===d.ans) {
+        fb.style.display='block'; fb.style.background='#eafaf1'; fb.style.border='1.5px solid #27ae60';
+        fb.innerHTML='<strong style="color:#27ae60">✓ 正解！</strong><br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';
+        qscore++;
+    } else {
+        fb.style.display='block'; fb.style.background='#fdedec'; fb.style.border='1.5px solid #e74c3c';
+        fb.innerHTML='<strong style="color:#e74c3c">✗ 不正解</strong>　正解：'+['①','②','③','④'][d.ans]+'<br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';
+    }
+    fb.innerHTML+='<br><button onclick="qi++;buildQuiz();" style="margin-top:8px;background:#1a5276;color:white;border:none;padding:7px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">次の問題 →</button>';
+}
+buildQuiz();
+
+/* ── チャレンジ（ドロップゾーン） ── */
+var isRunning=false, sW=null, sT, tI, bestTime=null, testScore=0;
+
+function setZone(z,val) { z.innerHTML=val; z.setAttribute('data-filled',val); }
+function getZoneVal(z) { return z.getAttribute('data-filled')||z.innerText.trim(); }
+function clearZoneEl(z) { z.innerHTML=''; z.removeAttribute('data-filled'); z.classList.remove('correct','wrong'); }
+
+function addToBank(word) {
+    var b=document.getElementById('wordBank');
+    var d=document.createElement('div');
+    d.className='drag-item'; d.setAttribute('data-val',word); d.innerText=word;
+    d.onclick=function(){
+        if(sW) sW.classList.remove('selected');
+        if(sW===this){sW=null;return;}
+        sW=this; this.classList.add('selected');
+    };
+    b.appendChild(d);
+}
+function zCl(z) {
+    if (!isRunning) return;
+    var cur=getZoneVal(z);
+    if (cur!=='') { addToBank(cur); clearZoneEl(z); return; }
+    if (sW) { var val=sW.getAttribute('data-val')||sW.innerText; setZone(z,val); sW.remove(); sW=null; }
+}
+function fmtTime(ms) {
+    var t=ms/1000;
+    return Math.floor(t/60).toString().padStart(2,'0')+':'+((t%60).toFixed(1)).padStart(4,'0');
+}
+function stCh() {
+    isRunning=true; sW=null; testScore=0;
+    sT=Date.now(); clearInterval(tI);
+    tI=setInterval(function(){ document.getElementById('timerDisplay').innerText=fmtTime(Date.now()-sT); },100);
+    var zones=document.querySelectorAll('.drop-zone-inline');
+    var allAns=[];
+    zones.forEach(function(z){ allAns.push(z.getAttribute('data-ans')); clearZoneEl(z); });
+    var b=document.getElementById('wordBank'); b.innerHTML='';
+    allAns.sort(function(){ return Math.random()-0.5; });
+    allAns.forEach(function(w){ addToBank(w); });
+    document.getElementById('score-panel').style.display='none';
+}
+function chAn() {
+    if (!isRunning) return;
+    var ok=true, correct=0, total=0;
+    document.querySelectorAll('.drop-zone-inline').forEach(function(z){
+        var ans=z.getAttribute('data-ans'), cur=getZoneVal(z);
+        total++;
+        if (cur===ans) { z.classList.add('correct'); z.classList.remove('wrong'); correct++; }
+        else { z.classList.add('wrong'); z.classList.remove('correct'); ok=false; if(cur!==''){addToBank(cur);clearZoneEl(z);} }
+    });
+    if (ok) {
+        clearInterval(tI); isRunning=false;
+        var el=Date.now()-sT;
+        if (bestTime===null||el<bestTime) {
+            bestTime=el;
+            document.getElementById('recordDisplay').innerText='🏆 ベスト: '+fmtTime(bestTime);
+        }
+        startCnf();
+        showScore(correct, total);
+    } else {
+        var wbc=document.querySelector('.word-bank-container');
+        wbc.classList.remove('shake'); void wbc.offsetWidth; wbc.classList.add('shake');
+        setTimeout(function(){ wbc.classList.remove('shake'); },500);
+    }
+}
+function shMo() {
+    clearInterval(tI); isRunning=false; sW=null;
+    document.querySelectorAll('.drop-zone-inline').forEach(function(z){
+        setZone(z,z.getAttribute('data-ans')); z.classList.remove('correct','wrong');
+    });
+    document.getElementById('wordBank').innerHTML='<span style="color:#888;font-size:0.9em;">お手本表示中。「チャレンジ開始」で練習できます。</span>';
+    document.getElementById('timerDisplay').innerText='00:00.0';
+}
+function showScore(correct, total) {
+    var pass = correct >= 5;
+    var panel = document.getElementById('score-panel');
+    panel.className = 'score-panel' + (pass ? '' : ' fail');
+    panel.style.display = 'block';
+    document.getElementById('score-text').innerText = correct + ' / ' + total + ' 問正解';
+    document.getElementById('score-msg').innerText = pass ? '🎉 合格！すばらしい！' : 'もう少し！復習してもう一度挑戦しよう。';
+}
+
+/* ── ステップ表示 ── */
+var stepRevState = { e1:0 };
+var stepLabels = { e1:['STEP 1','STEP 2','STEP 3','STEP 4'] };
+function revealStep(qid, total) {
+    var r=stepRevState[qid];
+    var el=document.getElementById(qid+'-s'+r);
+    if (el) { el.style.display='block'; el.classList.add('show'); stepRevState[qid]++; setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'nearest'}); },60); }
+    var btn=document.getElementById('rb-'+qid);
+    if (stepRevState[qid]>=total) { btn.style.display='none'; }
+    else { btn.innerText='▶ '+stepLabels[qid][stepRevState[qid]]+' を見る'; }
+}
+
+/* ── 紙吹雪 ── */
+var cvs=document.getElementById("confetti-canvas"), ctx2=cvs.getContext("2d"), pts=[], cnfRunning=false;
+function startCnf() {
+    cvs.width=window.innerWidth; cvs.height=window.innerHeight; pts=[];
+    for (var i=0;i<180;i++) pts.push({x:Math.random()*cvs.width,y:Math.random()*cvs.height-cvs.height,s:Math.random()*9+4,c:'hsl('+Math.floor(Math.random()*360)+',75%,65%)',sp:Math.random()*3+2});
+    cnfRunning=true; updateCnf();
+    setTimeout(function(){ cnfRunning=false; ctx2.clearRect(0,0,cvs.width,cvs.height); pts=[]; },4000);
+}
+function updateCnf() {
+    if (!cnfRunning) return;
+    ctx2.clearRect(0,0,cvs.width,cvs.height);
+    pts.forEach(function(p){ p.y+=p.sp; ctx2.fillStyle=p.c; ctx2.fillRect(p.x,p.y,p.s,p.s); if(p.y>cvs.height)p.y=-20; });
+    requestAnimationFrame(updateCnf);
+}
+
+/* ── 学習記録 ── */
+(function(){
+    var key='tenkai1';
+    try {
+        var d=JSON.parse(localStorage.getItem('study_'+key)||'{"count":0,"review":false}');
+        d.count=(d.count||0)+1;
+        d.lastDate=new Date().toLocaleDateString('ja-JP');
+        localStorage.setItem('study_'+key,JSON.stringify(d));
+    } catch(e){}
+})();
+shMo();
+
+/* ── 復習ボタン ── */
+function toggleReview() {
+    var key='tenkai1';
+    try {
+        var d=JSON.parse(localStorage.getItem('study_'+key)||'{"count":0,"review":false}');
+        d.review=!d.review;
+        localStorage.setItem('study_'+key,JSON.stringify(d));
+        updateReviewBtn(d.review);
+    } catch(e){}
+}
+function updateReviewBtn(r) {
+    document.getElementById('reviewIcon').innerText=r?'★':'☆';
+    document.getElementById('reviewText').innerText=r?'復習リストに追加済み':'復習リストに追加';
+    document.getElementById('reviewBtn').style.background=r?'#e74c3c':'#f39c12';
+}
+(function(){
+    var key='tenkai1';
+    try{ var d=JSON.parse(localStorage.getItem('study_'+key)||'{"count":0,"review":false}'); updateReviewBtn(d.review||false); }catch(e){}
+})();
+</script>
+</body>
+</html>

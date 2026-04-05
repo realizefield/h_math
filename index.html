@@ -29,9 +29,11 @@
         .progress-bar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg,#27ae60,#2ecc71); border-radius: 7px; transition: width 0.5s; }
         .unit-title { font-size: 1.05em; font-weight: 900; padding: 10px 16px; border-radius: 8px 8px 0 0; margin-top: 24px; display: flex; align-items: center; gap: 10px; }
-        .unit-title.blue  { background: #1a5276; color: white; }
-        .unit-title.teal  { background: #1e8449; color: white; }
-        .unit-title.purple{ background: #6c3483; color: white; }
+        .unit-title.blue   { background: #1a5276; color: white; }
+        .unit-title.teal   { background: #1e8449; color: white; }
+        .unit-title.orange { background: #ca6f1e; color: white; }
+        .unit-title.red    { background: #922b21; color: white; }
+        .unit-title.indigo { background: #283593; color: white; }
         .page-list { background: white; border: 2px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 4px; }
         .page-item { display: flex; align-items: center; border-bottom: 1px solid #eee; transition: background 0.15s; }
         .page-item:last-child { border-bottom: none; }
@@ -41,7 +43,7 @@
         .page-item.s3 { background: #d6eaf8; }
         .page-item.s3:hover { background: #aed6f1; }
         .page-item.sr { background: #fef9e7; border-left: 4px solid #f39c12; }
-        .page-num { font-weight: 900; font-size: 13px; padding: 14px 12px; min-width: 46px; text-align: center; align-self: stretch; display: flex; align-items: center; justify-content: center; border-right: 1px solid #eee; color: #1a5276; background: #f4f6f8; flex-shrink: 0; }
+        .page-num { font-weight: 900; font-size: 12px; padding: 14px 8px; min-width: 44px; text-align: center; align-self: stretch; display: flex; align-items: center; justify-content: center; border-right: 1px solid #eee; color: #1a5276; background: #f4f6f8; flex-shrink: 0; }
         .page-info { flex: 1; padding: 10px 14px; }
         .page-name { font-weight: bold; font-size: 14px; color: #1a5276; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .page-desc { font-size: 12px; color: #777; }
@@ -49,6 +51,7 @@
         .bk-y { background: #f1c40f; color: #333; }
         .bk-r { background: #e74c3c; color: white; }
         .bk-b { background: #2980b9; color: white; }
+        .bk-p { background: #8e44ad; color: white; }
         .sb { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
         .sb-none { background: #eee; color: #aaa; }
         .sb-done { background: #27ae60; color: white; }
@@ -56,7 +59,7 @@
         .sb-date { font-size: 11px; color: #aaa; }
         .rev-star { color: #f39c12; font-size: 13px; }
         .page-actions { display: flex; align-items: center; padding: 0 10px; flex-shrink: 0; }
-        .lv { font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 10px; margin-left: 4px; }
+        .lv { font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 10px; }
         .lv-ki  { background: #d5f5e3; color: #1e8449; }
         .lv-hyo { background: #d6eaf8; color: #1a5276; }
         .lv-ou  { background: #fdebd0; color: #d35400; }
@@ -73,6 +76,10 @@
         .footer { text-align: center; margin-top: 24px; font-size: 12px; color: #aaa; }
         .line-float-btn { position: fixed; bottom: 24px; right: 24px; background: var(--line-green); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; font-weight: bold; font-size: 11px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 2000; transition: 0.2s; }
         .line-float-btn:hover { transform: scale(1.1); }
+        /* 縦型分数 */
+        .frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-size:0.82em; line-height:1.15; margin:0 1px; }
+        .frac .num { border-bottom:1.5px solid currentColor; padding:0 3px 1px; font-weight:bold; text-align:center; }
+        .frac .den { padding:1px 3px 0; font-weight:bold; text-align:center; }
     </style>
 </head>
 <body>
@@ -83,13 +90,13 @@
 
 <div class="top-header">
     <h1>📐 数学Ⅰ　第1章　式の計算</h1>
-    <p>展開と因数分解 — 学習したいページを選んでください</p>
+    <p>展開と因数分解 — 学習したいページを選んでください（全15ページ）</p>
 </div>
 
 <div class="container">
 
     <div id="statsBar">
-        <div class="stat-item"><div class="stat-num" id="totalN">6</div><div class="stat-label">総ページ数</div></div>
+        <div class="stat-item"><div class="stat-num" id="totalN">15</div><div class="stat-label">総ページ数</div></div>
         <div class="stat-item green"><div class="stat-num" id="studiedN">0</div><div class="stat-label">学習済み</div></div>
         <div class="stat-item orange"><div class="stat-num" id="reviewN">0</div><div class="stat-label">復習リスト</div></div>
         <div class="progress-wrap">
@@ -110,15 +117,15 @@
         <span class="leg-item"><span class="leg-box" style="background:#eafaf1;"></span>学習済み（1〜2回）</span>
         <span class="leg-item"><span class="leg-box" style="background:#d6eaf8;"></span>しっかり学習（3回以上）</span>
         <span class="leg-item"><span class="leg-box" style="background:#fef9e7;border-left:3px solid #f39c12;"></span>⭐ 復習リスト</span>
-        <span style="font-weight:bold;color:#555;margin-left:12px;">難易度：</span>
+        <span style="font-weight:bold;color:#555;margin-left:8px;">難易度：</span>
         <span class="leg-item"><span class="lv lv-ki">📗 基礎</span></span>
         <span class="leg-item"><span class="lv lv-hyo">📘 標準</span></span>
         <span class="leg-item"><span class="lv lv-ou">📙 応用</span></span>
         <span class="leg-item"><span class="lv lv-hat">📕 発展</span></span>
     </div>
 
-    <!-- 展開 -->
-    <div class="unit-title blue">📖 展開　〜乗法公式〜</div>
+    <!-- 展開 基礎〜標準 -->
+    <div class="unit-title blue">📖 展開　〜乗法公式〜　基礎・標準</div>
     <div class="page-list">
         <div class="page-item" id="item-tenkai1">
             <div class="page-num">①</div>
@@ -133,7 +140,7 @@
             <div class="page-num">②</div>
             <div class="page-info">
                 <div class="page-name">(a＋b)³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
-                <div class="page-desc">3乗の展開公式・係数3・符号パターン　例題＋類題＋テスト</div>
+                <div class="page-desc">3乗の展開公式・係数3・全符号プラス　例題＋類題＋テスト</div>
                 <div id="info-tenkai2" style="margin-top:4px;"></div>
             </div>
             <div class="page-actions"><a href="tenkai2.html" class="open-btn" id="btn-tenkai2">開く →</a></div>
@@ -142,7 +149,7 @@
             <div class="page-num">③</div>
             <div class="page-info">
                 <div class="page-name">(a－b)³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
-                <div class="page-desc">マイナス符号の注意点・1・4項目がマイナス　例題＋類題＋テスト</div>
+                <div class="page-desc">1・4項目がマイナス・符号パターン ＋－＋－ に注意</div>
                 <div id="info-tenkai3" style="margin-top:4px;"></div>
             </div>
             <div class="page-actions"><a href="tenkai3.html" class="open-btn" id="btn-tenkai3">開く →</a></div>
@@ -151,7 +158,7 @@
             <div class="page-num">④</div>
             <div class="page-info">
                 <div class="page-name">a³±b³ の展開 <span class="bk bk-b">説明＋練習</span> <span class="lv lv-hyo">📘 標準</span></div>
-                <div class="page-desc">和の3乗・差の3乗の公式　真ん中の符号が逆になる仕組み　例題＋類題＋テスト</div>
+                <div class="page-desc">外の符号と真ん中 ab の符号が「逆」になる仕組み</div>
                 <div id="info-tenkai4" style="margin-top:4px;"></div>
             </div>
             <div class="page-actions"><a href="tenkai4.html" class="open-btn" id="btn-tenkai4">開く →</a></div>
@@ -160,15 +167,15 @@
             <div class="page-num">⑤</div>
             <div class="page-info">
                 <div class="page-name">(a＋b＋c)² の展開 <span class="bk bk-r">演習</span> <span class="lv lv-ou">📙 応用</span></div>
-                <div class="page-desc">面積モデルで理解する3変数展開　2倍の項に注意　例題＋類題＋テスト</div>
+                <div class="page-desc">各自の2乗＋異なる2つの積×2　面積モデルで理解</div>
                 <div id="info-tenkai5" style="margin-top:4px;"></div>
             </div>
             <div class="page-actions"><a href="tenkai5.html" class="open-btn" id="btn-tenkai5">開く →</a></div>
         </div>
     </div>
 
-    <!-- 因数分解 -->
-    <div class="unit-title teal">🔢 因数分解　〜たすきがけ〜</div>
+    <!-- 因数分解 基礎 -->
+    <div class="unit-title teal">🔢 因数分解　〜たすきがけ〜　基礎</div>
     <div class="page-list">
         <div class="page-item" id="item-insu1">
             <div class="page-num">⑥</div>
@@ -181,18 +188,113 @@
         </div>
     </div>
 
+    <!-- 展開 応用 -->
+    <div class="unit-title orange">🚀 展開　応用　〜かける順番をくふうする〜</div>
+    <div class="page-list">
+        <div class="page-item" id="item-tenkai_app12">
+            <div class="page-num">⑦⑧</div>
+            <div class="page-info">
+                <div class="page-name">展開応用①② 連続差の平方・{(a±b)(a∓b)}² <span class="bk bk-p">応用</span> <span class="lv lv-ou">📙 応用</span></div>
+                <div class="page-desc">(a-b)(a+b)を連続使用して高次式を展開 / 2乗を先にまとめる工夫</div>
+                <div id="info-tenkai_app12" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai_app12.html" class="open-btn" id="btn-tenkai_app12">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai_app34">
+            <div class="page-num">⑨</div>
+            <div class="page-info">
+                <div class="page-name">展開応用③④ {a³±b³}²の展開・並び替えてa⁶±b⁶ <span class="bk bk-p">応用</span> <span class="lv lv-ou">📙 応用</span></div>
+                <div class="page-desc">{}でまとめてa³±b³の形に変換 / 並び替えて(χ³－1)(χ³＋1)の積を作る</div>
+                <div id="info-tenkai_app34" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai_app34.html" class="open-btn" id="btn-tenkai_app34">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-tenkai_app5">
+            <div class="page-num">⑩</div>
+            <div class="page-info">
+                <div class="page-name">展開応用⑤ A置換で4因数を展開・因数分解 <span class="bk bk-p">応用</span> <span class="lv lv-hat">📕 発展</span></div>
+                <div class="page-desc">定数の和が等しいペアを選びA＝○○と置いて一気に展開・因数分解</div>
+                <div id="info-tenkai_app5" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="tenkai_app5.html" class="open-btn" id="btn-tenkai_app5">開く →</a></div>
+        </div>
+    </div>
+
+    <!-- 因数分解 応用 -->
+    <div class="unit-title red">🔑 因数分解　応用　〜A置換・降べきの順・複二次式〜</div>
+    <div class="page-list">
+        <div class="page-item" id="item-insu_app12">
+            <div class="page-num">⑪</div>
+            <div class="page-info">
+                <div class="page-name">因数分解応用①② A置換・最低次数の文字に着目 <span class="bk bk-p">応用</span> <span class="lv lv-ou">📙 応用</span></div>
+                <div class="page-desc">共通部分をAで置き換える / 3変数は最低次数の文字で整理してくくる</div>
+                <div id="info-insu_app12" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="insu_app12.html" class="open-btn" id="btn-insu_app12">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-insu_app34">
+            <div class="page-num">⑫</div>
+            <div class="page-info">
+                <div class="page-name">因数分解応用③④ 降べきの順に整理してたすきがけ <span class="bk bk-p">応用</span> <span class="lv lv-hat">📕 発展</span></div>
+                <div class="page-desc">2変数多項式はχについて降べきに整理→定数部分も因数分解→たすきがけ</div>
+                <div id="info-insu_app34" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="insu_app34.html" class="open-btn" id="btn-insu_app34">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-insu_app5">
+            <div class="page-num">⑬</div>
+            <div class="page-info">
+                <div class="page-name">因数分解応用⑤ χ²＝t 置換・複二次式 <span class="bk bk-p">応用</span> <span class="lv lv-hat">📕 発展</span></div>
+                <div class="page-desc">4次式をtの2次式に変換 / (◯²＋△²)²－□²の形に変形して因数分解</div>
+                <div id="info-insu_app5" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="insu_app5.html" class="open-btn" id="btn-insu_app5">開く →</a></div>
+        </div>
+    </div>
+
+    <!-- 対称式 -->
+    <div class="unit-title indigo">♾ 対称式の計算</div>
+    <div class="page-list">
+        <div class="page-item" id="item-taisho1">
+            <div class="page-num">⑭</div>
+            <div class="page-info">
+                <div class="page-name">対称式①②③ χ²＋y², χ³＋y³, χ⁴＋y⁴, χ⁶＋y⁶ の計算 <span class="bk bk-p">応用</span> <span class="lv lv-hat">📕 発展</span></div>
+                <div class="page-desc">2大公式の暗記→χ＋y, χy から順番に求める / χ²＋y²とχ＋yからχyを逆算</div>
+                <div id="info-taisho1" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="taisho1.html" class="open-btn" id="btn-taisho1">開く →</a></div>
+        </div>
+        <div class="page-item" id="item-taisho2">
+            <div class="page-num">⑮</div>
+            <div class="page-info">
+                <div class="page-name">対称式④ χ＋<span class="frac"><span class="num">1</span><span class="den">χ</span></span> 型の計算 <span class="bk bk-p">応用</span> <span class="lv lv-hat">📕 発展</span></div>
+                <div class="page-desc">両辺を2乗してχ²＋<span class="frac"><span class="num">1</span><span class="den">χ²</span></span>を求める &nbsp;/&nbsp; (χ－<span class="frac"><span class="num">1</span><span class="den">χ</span></span>)²＝χ²＋<span class="frac"><span class="num">1</span><span class="den">χ²</span></span>－2 を使う</div>
+                <div id="info-taisho2" style="margin-top:4px;"></div>
+            </div>
+            <div class="page-actions"><a href="taisho2.html" class="open-btn" id="btn-taisho2">開く →</a></div>
+        </div>
+    </div>
+
     <button class="reset-btn" onclick="resetAll()">🗑 学習記録をすべてリセット</button>
-    <div class="footer">数学Ⅰ　展開と因数分解　学習教材</div>
+    <div class="footer">数学Ⅰ　展開と因数分解　学習教材　全15ページ</div>
 </div>
 
 <script>
 var PAGES = [
-    {key:'tenkai1', name:'① (ax＋b)(cx＋d)の展開', file:'tenkai1.html'},
-    {key:'tenkai2', name:'② (a＋b)³の展開',        file:'tenkai2.html'},
-    {key:'tenkai3', name:'③ (a－b)³の展開',        file:'tenkai3.html'},
-    {key:'tenkai4', name:'④ a³±b³の展開',          file:'tenkai4.html'},
-    {key:'tenkai5', name:'⑤ (a＋b＋c)²の展開',     file:'tenkai5.html'},
-    {key:'insu1',   name:'⑥ acx²型の因数分解',     file:'insu1.html'},
+    {key:'tenkai1',      name:'① (ax＋b)(cx＋d)の展開',          file:'tenkai1.html'},
+    {key:'tenkai2',      name:'② (a＋b)³の展開',                  file:'tenkai2.html'},
+    {key:'tenkai3',      name:'③ (a－b)³の展開',                  file:'tenkai3.html'},
+    {key:'tenkai4',      name:'④ a³±b³の展開',                    file:'tenkai4.html'},
+    {key:'tenkai5',      name:'⑤ (a＋b＋c)²の展開',              file:'tenkai5.html'},
+    {key:'insu1',        name:'⑥ acx²型の因数分解',              file:'insu1.html'},
+    {key:'tenkai_app12', name:'⑦⑧ 展開応用①② 連続差の平方',    file:'tenkai_app12.html'},
+    {key:'tenkai_app34', name:'⑨ 展開応用③④ {a³±b³}²・並替',   file:'tenkai_app34.html'},
+    {key:'tenkai_app5',  name:'⑩ 展開応用⑤ A置換4因数',         file:'tenkai_app5.html'},
+    {key:'insu_app12',   name:'⑪ 因数分解応用①② A置換・最低次数', file:'insu_app12.html'},
+    {key:'insu_app34',   name:'⑫ 因数分解応用③④ 降べきの順',    file:'insu_app34.html'},
+    {key:'insu_app5',    name:'⑬ 因数分解応用⑤ χ²=t・複二次式', file:'insu_app5.html'},
+    {key:'taisho1',      name:'⑭ 対称式①②③',                   file:'taisho1.html'},
+    {key:'taisho2',      name:'⑮ 対称式④ χ＋1/χ型',            file:'taisho2.html'},
 ];
 
 function getData(key) {

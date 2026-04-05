@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"><title>数学Ⅰ：⑭対称式①②③</title>
+<style>
+        :root { --bg-color:#f8f9fa; --drop-zone-bg:#fff9c4; }
+        body { font-family:sans-serif; background:var(--bg-color); margin:0; padding:0 16px; overflow-x:hidden; box-sizing:border-box; }
+        .sticky-header { position:sticky; top:0; background:var(--bg-color); padding:10px 16px; z-index:1000; border-bottom:2px solid #ddd; box-sizing:border-box; }
+        .page-nav { max-width:900px; margin:0 auto 10px; display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; }
+        .nav-btn { text-decoration:none; background:#7f8c8d; color:white; padding:6px 14px; border-radius:20px; font-size:0.85em; font-weight:bold; transition:0.2s; white-space:nowrap; }
+        .nav-btn:hover{background:#34495e;} .nav-btn.index-btn{background:#1a5276;}
+        .lv-banner { max-width:900px; margin:0 auto 10px; background:#fdebd0; border-left:6px solid #d35400; border-radius:0 8px 8px 0; padding:10px 16px; font-size:13px; color:#d35400; font-weight:bold; }
+        .challenge-panel { background:#eaf0fb; border:1.5px solid #aed6f1; color:#1a5276; padding:10px 20px; border-radius:8px; display:flex; justify-content:space-around; align-items:center; max-width:900px; margin:0 auto 10px; }
+        .timer { font-size:1.5em; color:#1a5276; font-family:monospace; font-weight:bold; }
+        .word-bank-container { background:#eee; padding:12px 16px; border-radius:8px; border:1px solid #ccc; max-width:900px; margin:0 auto; }
+        .word-bank { display:flex; flex-wrap:wrap; gap:8px; min-height:40px; }
+        .drag-item { background:#fff; color:#c0392b; border:1px solid #333; padding:5px 14px; cursor:pointer; font-weight:bold; font-size:1em; border-radius:3px; user-select:none; }
+        .drag-item.selected { background:#f1c40f; color:#333; box-shadow:0 0 0 3px #e67e22; transform:scale(1.08); }
+        @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+        .word-bank-container.shake{animation:shake 0.4s ease;}
+        .container { max-width:900px; margin:20px auto; background:white; padding:24px; border-radius:12px; }
+        .sec-title { font-weight:900; font-size:1.1em; color:#2980b9; border-left:6px solid #2980b9; padding-left:10px; margin:24px 0 14px; }
+        .membox { background:#eaf0fb; border:2px solid #2980b9; border-radius:10px; padding:16px 20px; margin-bottom:16px; font-size:14px; line-height:2; }
+        .membox .mem-title { font-weight:900; color:#1a5276; font-size:1em; margin-bottom:8px; }
+        .point-box { border-radius:9px; padding:12px 16px; margin-bottom:14px; border-left:4px solid #f39c12; font-size:14px; line-height:1.9; background:#fef9e7; }
+        .point-box h4 { color:#e67e22; font-size:12px; font-weight:900; margin:0 0 5px; }
+        .exp-box { background:#f4f6f8; border-radius:9px; padding:12px 16px; margin-bottom:10px; border-left:4px solid #27ae60; font-size:14px; line-height:2; display:none; }
+        .exp-box.blue{border-left-color:#2980b9;} .exp-box.blue h4{color:#2980b9;}
+        .exp-box.orange{border-left-color:#e67e22;} .exp-box.orange h4{color:#e67e22;}
+        .exp-box h4 { font-size:12px; color:#27ae60; font-weight:900; margin-bottom:5px; }
+        @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        .reveal-btn{background:#2980b9;color:white;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:bold;cursor:pointer;margin-top:8px;font-family:sans-serif;}
+        .reveal-btn:hover{background:#1a5276;}
+        .reidai-box{background:#fafcff;border:2px solid #aed6f1;border-radius:10px;padding:20px 24px;margin-bottom:24px;}
+        .ruidai-box{background:#fffdf5;border:2px solid #f9e4b0;border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+        .ruidai-title{font-weight:900;font-size:1em;color:#e67e22;margin-bottom:14px;border-left:6px solid #e67e22;padding-left:10px;}
+        .test-box{background:#fdf2f8;border:2px solid #d7bde2;border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+        .test-title{font-weight:900;font-size:1em;color:#8e44ad;margin-bottom:14px;border-left:6px solid #8e44ad;padding-left:10px;}
+        .q-text{font-size:14.5px;line-height:1.9;margin-bottom:14px;background:#f0f6ff;border-radius:6px;padding:10px 14px;}
+        .step-area{font-size:14.5px;line-height:2.4;}
+        .step-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+        .step-label{color:#888;min-width:80px;font-size:13px;flex-shrink:0;}
+        .phase-bar{background:#eaf0fb;border-left:4px solid #2980b9;padding:4px 10px;border-radius:0 4px 4px 0;font-size:12px;font-weight:bold;color:#2980b9;margin:12px 0 6px;}
+        .drop-zone-inline{display:inline-flex;align-items:center;justify-content:center;min-width:60px;min-height:2em;background:var(--drop-zone-bg);border:1.5px solid #aaa;vertical-align:middle;cursor:pointer;text-align:center;font-weight:bold;color:#c0392b;padding:2px 8px;border-radius:3px;font-size:14px;transition:background .15s;}
+        .drop-zone-inline:hover{border-color:#e67e22;background:#fff3cd;}
+        .drop-zone-inline.correct{background:#d4edda!important;border:2px solid #28a745!important;color:#155724!important;}
+        .drop-zone-inline.wrong{background:#f8d7da!important;border:2px solid #dc3545!important;}
+        .drop-zone-inline.w{min-width:60px;} .drop-zone-inline.wide{min-width:100px;}
+        .drop-zone-inline.xw{min-width:140px;} .drop-zone-inline.xxw{min-width:180px;}
+        .ans-row{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+        .score-panel{background:#eafaf1;border:2px solid #27ae60;border-radius:10px;padding:14px 20px;text-align:center;margin-top:16px;display:none;}
+        .score-panel.fail{background:#fdedec;border-color:#e74c3c;}
+        .score-big{font-size:2em;font-weight:900;color:#27ae60;}
+        .score-panel.fail .score-big{color:#e74c3c;}
+        .controls{text-align:center;margin-top:30px;padding-bottom:100px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+        .main-btn{padding:13px 28px;font-size:1rem;cursor:pointer;border:none;border-radius:8px;font-weight:bold;color:white;}
+        .btn-start{background:#27ae60;} .btn-check{background:#e67e22;} .btn-show{background:#7f8c8d;}
+        #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+        .quiz-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+        @media(max-width:560px){.quiz-choice-grid{grid-template-columns:1fr;}}
+        .quiz-btn{padding:10px 8px;border:2px solid #ddd;border-radius:8px;background:white;font-size:14px;cursor:pointer;font-family:sans-serif;font-weight:bold;}
+        .quiz-btn.ok{border-color:#27ae60;background:#d4edda;color:#155724;}
+        .quiz-btn.ng{border-color:#e74c3c;background:#f8d7da;}
+        .quiz-btn.show-ans{border-color:#27ae60;background:#d4edda;color:#155724;}
+</style></head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="sticky-header">
+  <nav class="page-nav">
+    <a href="insu_app5.html" class="nav-btn">◀ ⑬因数分解応用⑤</a>
+    <a href="index.html" class="nav-btn index-btn">📋 目次</a>
+    <a href="taisho2.html" class="nav-btn">⑮対称式④ ▶</a>
+  </nav>
+  <div class="lv-banner">📙 応用レベル — 2つの基本公式を暗記してスピード計算！χ²＋y², χ³＋y³の求め方をマスター</div>
+  <div class="challenge-panel">
+    <div>TIME: <span id="timerDisplay" class="timer">00:00.0</span></div>
+    <div id="recordDisplay" style="font-size:0.8em;">記録なし</div>
+  </div>
+  <div class="word-bank-container"><div id="wordBank" class="word-bank">「チャレンジ開始」をクリックしてください。</div></div>
+</div>
+<div class="container">
+
+<div class="sec-title">📌 対称式の計算① — 基本公式の暗記</div>
+<div class="membox">
+    <div class="mem-title">【暗記必須】</div>
+    ① χ²＋y² ＝ (χ＋y)² <strong>－ 2χy</strong><br>
+    ② χ³＋y³ ＝ (χ＋y)³ <strong>－ 3χy(χ＋y)</strong>
+</div>
+<div class="reidai-box">
+    <div class="phase-bar">例題11 — χ＋y＝3，χy＝2 のとき</div>
+    <div class="q-text">χ²＋y²，χ³＋y³ の値をそれぞれ求めなさい。</div>
+    <button class="reveal-btn" id="rb-e11" onclick="revealStep('e11',2)">▶ STEP 1 を見る</button>
+    <div class="exp-box" id="e11-s0"><h4>STEP 1 — χ²＋y²</h4>
+        χ²＋y² ＝ (χ＋y)²－2χy ＝ 3²－2×2 ＝ 9－4 ＝ <strong style="color:#c0392b;">5</strong>
+    </div>
+    <div class="exp-box blue" id="e11-s1"><h4>STEP 2 — χ³＋y³</h4>
+        χ³＋y³ ＝ (χ＋y)³－3χy(χ＋y) ＝ 3³－3×2×3 ＝ 27－18 ＝ <strong style="color:#c0392b;">9</strong>
+    </div>
+</div>
+
+<div class="sec-title">📌 対称式の計算② — χ⁴＋y⁴, χ⁶＋y⁶ まで求める</div>
+<div class="membox">
+    <div class="mem-title">【応用公式】</div>
+    χ⁴＋y⁴ ＝ (χ²＋y²)² <strong>－ 2(χy)²</strong><br>
+    χ⁶＋y⁶ ＝ (χ³＋y³)² <strong>－ 2(χy)³</strong>
+</div>
+
+<div class="sec-title">📌 対称式の計算③ — χ²＋y², χ＋y から χy を求めて計算</div>
+<div class="point-box">
+    <h4>💡 手順</h4>
+    χ²＋y² ＝ (χ＋y)²－2χy に χ²＋y² と χ＋y を代入 → χy を求める → 各公式に代入
+</div>
+
+<div class="sec-title">✏️ 練習（4択クイズ）</div>
+<div id="quiz-t123"></div>
+
+<div class="sec-title">🏆 テスト（チャレンジ）</div>
+<div class="test-box">
+    <div class="test-title">テスト — 6問に挑戦！（5問以上で合格）</div>
+
+    <div class="phase-bar">問1 — χ＋y＝2，χy＝－1 のとき</div>
+    <div class="q-text">χ²＋y²，χ³＋y³ の値を求めよ。</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">χ²＋y²</span>＝(χ＋y)²－2χy ＝ 2²－2×(－1) ＝ <span class="drop-zone-inline w" data-ans="6" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ³＋y³</span>＝(χ＋y)³－3χy(χ＋y) ＝ 2³－3×(－1)×2 ＝ <span class="drop-zone-inline w" data-ans="14" onclick="zCl(this)"></span></div>
+    </div>
+
+    <div class="phase-bar">問2 — χ＋y＝3，χy＝1 のとき</div>
+    <div class="q-text">χ²＋y²，χ³＋y³ の値を求めよ。&lt;国立病院機構浜田医療センター附看&gt;</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">χ²＋y²</span>＝3²－2×1 ＝ <span class="drop-zone-inline w" data-ans="7" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ³＋y³</span>＝3³－3×1×3 ＝ <span class="drop-zone-inline w" data-ans="18" onclick="zCl(this)"></span></div>
+    </div>
+
+    <div class="phase-bar">問3 — χ＋y＝3，χy＝2 のとき χ⁴＋y⁴ を求めよ</div>
+    <div class="q-text">χ＋y＝3，χy＝2 のとき χ⁴＋y⁴ の値を求めよ。</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">χ²＋y²</span>＝3²－2×2 ＝ <span class="drop-zone-inline w" data-ans="5" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ⁴＋y⁴</span>＝(χ²＋y²)²－2(χy)² ＝ 5²－2×2² ＝ 25－8 ＝ <span class="drop-zone-inline w" data-ans="17" onclick="zCl(this)"></span></div>
+    </div>
+
+    <div class="phase-bar">問4 — χ＋y＝1，χy＝－6 のとき</div>
+    <div class="q-text">χ²＋y²，χ³＋y³，χ⁴＋y⁴ の値を求めよ。&lt;三育学院短大改題&gt;</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">χ²＋y²</span>＝1²－2×(－6) ＝ <span class="drop-zone-inline w" data-ans="13" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ³＋y³</span>＝1³－3×(－6)×1 ＝ <span class="drop-zone-inline w" data-ans="19" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ⁴＋y⁴</span>＝13²－2×(－6)² ＝ 169－72 ＝ <span class="drop-zone-inline w" data-ans="97" onclick="zCl(this)"></span></div>
+    </div>
+
+    <div class="phase-bar">問5 — χ²＋y²＝13，χ＋y＝5 のとき χ³＋y³ を求めよ</div>
+    <div class="q-text">χ²＋y²＝13，χ＋y＝5 のとき χ³＋y³ を求めよ。</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">χy を求める</span>13 ＝ 5²－2χy → 2χy ＝ 12 → χy ＝ <span class="drop-zone-inline w" data-ans="6" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">χ³＋y³</span>＝5³－3×6×5 ＝ 125－90 ＝ <span class="drop-zone-inline w" data-ans="35" onclick="zCl(this)"></span></div>
+    </div>
+
+    <div class="phase-bar">問6 — χ²＋y²＝5，χ＋y＝3 のとき</div>
+    <div class="q-text">α＋β＝3，α²＋β²＝5 のとき α³＋β³，α⁴＋β⁴ を求めよ。&lt;吉備国際大学&gt;</div>
+    <div class="step-area">
+        <div class="step-row"><span class="step-label">αβを求める</span>5 ＝ 3²－2αβ → αβ ＝ <span class="drop-zone-inline w" data-ans="2" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">α³＋β³</span>＝3³－3×2×3 ＝ <span class="drop-zone-inline w" data-ans="9" onclick="zCl(this)"></span></div>
+        <div class="step-row"><span class="step-label">α⁴＋β⁴</span>＝5²－2×2² ＝ <span class="drop-zone-inline w" data-ans="17" onclick="zCl(this)"></span></div>
+    </div>
+</div>
+
+<div id="score-panel" class="score-panel"><div class="score-big" id="score-text"></div><div id="score-msg" style="margin-top:6px;font-size:14px;"></div></div>
+</div>
+<div class="controls">
+  <button class="main-btn btn-start" onclick="stCh()">▶ チャレンジ開始</button>
+  <button class="main-btn btn-check" onclick="chAn()">✔ 答え合わせ</button>
+  <button class="main-btn btn-show" onclick="shMo()">👁 お手本を見る</button>
+</div>
+<div style="position:fixed;bottom:110px;left:16px;z-index:3000;">
+  <button id="reviewBtn" onclick="toggleReview()" style="background:#f39c12;color:white;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:bold;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;">
+    <span id="reviewIcon">☆</span><span id="reviewText">復習リストに追加</span>
+  </button>
+</div>
+<script>
+var UNIT_KEY='taisho1';
+
+var isRunning=false,sW=null,sT,tI,bestTime=null;
+function setZone(z,val){z.innerHTML=val;z.setAttribute('data-filled',val);}
+function getZoneVal(z){return z.getAttribute('data-filled')||z.innerText.trim();}
+function clearZoneEl(z){z.innerHTML='';z.removeAttribute('data-filled');z.classList.remove('correct','wrong');}
+function addToBank(word){var b=document.getElementById('wordBank'),d=document.createElement('div');d.className='drag-item';d.setAttribute('data-val',word);d.innerText=word;d.onclick=function(){if(sW)sW.classList.remove('selected');if(sW===this){sW=null;return;}sW=this;this.classList.add('selected');};b.appendChild(d);}
+function zCl(z){if(!isRunning)return;var cur=getZoneVal(z);if(cur!==''){addToBank(cur);clearZoneEl(z);return;}if(sW){var val=sW.getAttribute('data-val')||sW.innerText;setZone(z,val);sW.remove();sW=null;}}
+function fmtTime(ms){var t=ms/1000;return Math.floor(t/60).toString().padStart(2,'0')+':'+((t%60).toFixed(1)).padStart(4,'0');}
+function stCh(){isRunning=true;sW=null;sT=Date.now();clearInterval(tI);tI=setInterval(function(){document.getElementById('timerDisplay').innerText=fmtTime(Date.now()-sT);},100);var zones=document.querySelectorAll('.drop-zone-inline'),allAns=[];zones.forEach(function(z){allAns.push(z.getAttribute('data-ans'));clearZoneEl(z);});var b=document.getElementById('wordBank');b.innerHTML='';allAns.sort(function(){return Math.random()-0.5;});allAns.forEach(function(w){addToBank(w);});document.getElementById('score-panel').style.display='none';}
+function chAn(){if(!isRunning)return;var ok=true,correct=0,total=0;document.querySelectorAll('.drop-zone-inline').forEach(function(z){var ans=z.getAttribute('data-ans'),cur=getZoneVal(z);total++;if(cur===ans){z.classList.add('correct');z.classList.remove('wrong');correct++;}else{z.classList.add('wrong');z.classList.remove('correct');ok=false;if(cur!==''){addToBank(cur);clearZoneEl(z);}}});if(ok){clearInterval(tI);isRunning=false;var el=Date.now()-sT;if(bestTime===null||el<bestTime){bestTime=el;document.getElementById('recordDisplay').innerText='🏆 ベスト: '+fmtTime(bestTime);}startCnf();showScore(correct,total);}else{var wbc=document.querySelector('.word-bank-container');wbc.classList.remove('shake');void wbc.offsetWidth;wbc.classList.add('shake');setTimeout(function(){wbc.classList.remove('shake');},500);}}
+function shMo(){clearInterval(tI);isRunning=false;sW=null;document.querySelectorAll('.drop-zone-inline').forEach(function(z){setZone(z,z.getAttribute('data-ans'));z.classList.remove('correct','wrong');});document.getElementById('wordBank').innerHTML='<span style="color:#888;font-size:0.9em;">お手本表示中。「チャレンジ開始」で練習できます。</span>';document.getElementById('timerDisplay').innerText='00:00.0';}
+function showScore(c,t){var pass=c>=5,panel=document.getElementById('score-panel');panel.className='score-panel'+(pass?'':' fail');panel.style.display='block';document.getElementById('score-text').innerText=c+' / '+t+' 問正解';document.getElementById('score-msg').innerText=pass?'🎉 合格！すばらしい！':'もう少し！復習してもう一度挑戦しよう。';}
+var stepRevState={};
+function revealStep(qid,total){if(!stepRevState[qid])stepRevState[qid]=0;var r=stepRevState[qid],el=document.getElementById(qid+'-s'+r);if(el){el.style.display='block';stepRevState[qid]++;setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}var btn=document.getElementById('rb-'+qid);if(btn){if(stepRevState[qid]>=total)btn.style.display='none';else btn.innerText='▶ STEP '+(stepRevState[qid]+1)+' を見る';}}
+var cvs=document.getElementById("confetti-canvas"),ctx2=cvs.getContext("2d"),pts=[],cnfRunning=false;
+function startCnf(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;pts=[];for(var i=0;i<180;i++)pts.push({x:Math.random()*cvs.width,y:Math.random()*cvs.height-cvs.height,s:Math.random()*9+4,c:'hsl('+Math.floor(Math.random()*360)+',75%,65%)',sp:Math.random()*3+2});cnfRunning=true;updateCnf();setTimeout(function(){cnfRunning=false;ctx2.clearRect(0,0,cvs.width,cvs.height);pts=[];},4000);}
+function updateCnf(){if(!cnfRunning)return;ctx2.clearRect(0,0,cvs.width,cvs.height);pts.forEach(function(p){p.y+=p.sp;ctx2.fillStyle=p.c;ctx2.fillRect(p.x,p.y,p.s,p.s);if(p.y>cvs.height)p.y=-20;});requestAnimationFrame(updateCnf);}
+var quizState={};
+function initQuiz(data,areaId){quizState[areaId]={qi:0,score:0,data:data};buildQ(areaId);}
+function buildQ(areaId){var s=quizState[areaId],data=s.data,area=document.getElementById(areaId);if(!area)return;area.innerHTML='';if(s.qi>=data.length){area.innerHTML='<div class="score-panel" style="display:block;"><div class="score-big">'+s.score+'/'+data.length+'</div><button onclick="quizState[\''+areaId+'\'].qi=0;quizState[\''+areaId+'\'].score=0;buildQ(\''+areaId+'\')" style="margin-top:10px;background:#1a5276;color:white;border:none;padding:8px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">もう一度</button></div>';return;}var d=data[s.qi];var h='<div class="ruidai-box"><div class="ruidai-title">類題 '+(s.qi+1)+' / '+data.length+'</div><div class="q-text">'+d.q+'</div><div class="quiz-choice-grid">';['①','②','③','④'].forEach(function(l,i){h+='<button class="quiz-btn" onclick="ansQ(\''+areaId+'\','+i+','+d.ans+')" id="qcb-'+areaId+'-'+i+'">'+l+'　'+d.choices[i]+'</button>';});h+='</div><div id="qfb-'+areaId+'" style="display:none;border-radius:8px;padding:10px;font-size:13px;margin-top:6px;"></div></div>';area.innerHTML=h;}
+function ansQ(areaId,chosen,ans){var s=quizState[areaId],d=s.data[s.qi];for(var i=0;i<4;i++){var b=document.getElementById('qcb-'+areaId+'-'+i);if(!b)continue;b.disabled=true;if(i===ans)b.className='quiz-btn '+(chosen===ans?'ok':'show-ans');else if(i===chosen&&chosen!==ans)b.className='quiz-btn ng';}var fb=document.getElementById('qfb-'+areaId);if(chosen===ans){fb.style.cssText='display:block;background:#eafaf1;border:1.5px solid #27ae60;border-radius:8px;padding:10px;';fb.innerHTML='<strong style="color:#27ae60">✓ 正解！</strong><br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';s.score++;}else{fb.style.cssText='display:block;background:#fdedec;border:1.5px solid #e74c3c;border-radius:8px;padding:10px;';fb.innerHTML='<strong style="color:#e74c3c">✗ 不正解</strong>　正解：'+['①','②','③','④'][ans]+'<br><span style="font-size:12px;color:#555;">'+d.sol+'</span>';}fb.innerHTML+='<br><button onclick="quizState[\''+areaId+'\'].qi++;buildQ(\''+areaId+'\')" style="margin-top:8px;background:#1a5276;color:white;border:none;padding:7px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">次の問題 →</button>';}
+function toggleReview(){try{var d=JSON.parse(localStorage.getItem('study_'+UNIT_KEY)||'{"count":0,"review":false}');d.review=!d.review;localStorage.setItem('study_'+UNIT_KEY,JSON.stringify(d));updateReviewBtn(d.review);}catch(e){}}
+function updateReviewBtn(r){document.getElementById('reviewIcon').innerText=r?'★':'☆';document.getElementById('reviewText').innerText=r?'復習リストに追加済み':'復習リストに追加';document.getElementById('reviewBtn').style.background=r?'#e74c3c':'#f39c12';}
+(function(){try{var d=JSON.parse(localStorage.getItem('study_'+UNIT_KEY)||'{"count":0,"review":false}');d.count=(d.count||0)+1;d.lastDate=new Date().toLocaleDateString('ja-JP');localStorage.setItem('study_'+UNIT_KEY,JSON.stringify(d));updateReviewBtn(d.review||false);}catch(e){}})();
+shMo();
+
+
+var qt123 = [
+    {q:'χ＋y＝2，χy＝－1 のとき χ²＋y² は？',choices:['6','4','2','8'],ans:0,sol:'(χ+y)²-2χy = 2²-2×(-1)=6'},
+    {q:'χ＋y＝－2，χy＝－35 のとき χ²＋y² は？',choices:['74','70','4','66'],ans:0,sol:'(-2)²-2×(-35)=4+70=74'},
+    {q:'χ＋y＝3，χy＝2 のとき χ³＋y³ は？',choices:['9','27','15','3'],ans:0,sol:'3³-3×2×3=27-18=9'},
+    {q:'χ＋y＝3，χy＝2 のとき χ⁴＋y⁴ は？',choices:['17','25','13','81'],ans:0,sol:'χ²+y²=3²-4=5, χ⁴+y⁴=5²-2×2²=17'},
+];
+initQuiz(qt123, 'quiz-t123');
+
+</script>
+</body></html>
